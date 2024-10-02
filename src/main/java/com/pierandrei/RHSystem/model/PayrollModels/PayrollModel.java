@@ -15,17 +15,17 @@ import java.util.List;
 public class PayrollModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long id; // ID único da folha de pagamento
 
-    private List<Long> employeesIds;
+    private List<Long> employeesIds; // Lista de IDs dos funcionários
 
-    private List<Double> wageForEmployeeId;
+    private List<Double> wageForEmployeeId; // Lista de salários correspondentes aos IDs dos funcionários
 
-    private List<Double> bonusForEmployeeId;
+    private List<Double> bonusForEmployeeId; // Lista de bônus correspondentes aos IDs dos funcionários
 
-    private LocalDate PaymentDate;
+    private List<Double> discountForEmployeeId; // Lista de descontos correspondentes aos IDs dos funcionários
 
-    private double paidTotal;
+    private LocalDate paymentDate; // Data do pagamento
 
-
+    private double paidTotal; // Total pago na folha
 }
