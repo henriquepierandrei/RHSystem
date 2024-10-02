@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -19,7 +19,7 @@ public class EmployeeModel {
     // Dados Pessoais
     private String name; // Nome do funcionário
     private String email; // E-mail do funcionário
-    private Date dateBorn; // Data de nascimento do funcionário
+    private LocalDate dateBorn; // Data de nascimento do funcionário
     private String cpf; // CPF do funcionário
     private String phone; // Telefone do funcionário
     private String rg; // RG do funcionário

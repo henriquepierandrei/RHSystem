@@ -1,9 +1,14 @@
 package com.pierandrei.RHSystem.service;
 
+import com.pierandrei.RHSystem.repository.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CpfValidator {
+    private final EmployeeRepository employeeRepository;
+
 
     public boolean isValid(String cpf) {
         // Remove caracteres não numéricos
@@ -11,6 +16,11 @@ public class CpfValidator {
 
         // Verifica se o CPF tem 11 dígitos
         if (cpf.length() != 11) {
+            return false;
+        }
+
+        // Verifica se o CPF já existe ou não cadastrado no Banco de Dados!
+        if (employeeRepository.existsByCpf(cpf)){
             return false;
         }
 
