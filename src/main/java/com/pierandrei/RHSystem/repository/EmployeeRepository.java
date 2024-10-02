@@ -5,4 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeModel, Long> {
     boolean existsByCpf(String cpf);
+
+    boolean existsByRg(String rg);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByPhone(String phone);
 }
