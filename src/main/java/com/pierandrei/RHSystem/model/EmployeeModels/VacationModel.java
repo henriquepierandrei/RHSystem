@@ -13,12 +13,12 @@ import java.time.LocalDate;
 public class VacationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id; // Unique identifier
+    private long id; // Identificador único
 
-    private long employeeId; // Reference to the employee
+    private long employeeId; // Referência ao funcionário
 
-    private LocalDate startDate; // Vacation start date
-    private LocalDate endDate; // Vacation end date
+    private LocalDate startDate; // Data de início das férias
+    private LocalDate endDate; // Data de término das férias
 
-    private String reason; // Reason for vacation (optional)
+    private String reason; // Motivo das férias (opcional)
 }

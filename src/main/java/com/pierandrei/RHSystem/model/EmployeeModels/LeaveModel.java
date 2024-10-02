@@ -13,12 +13,12 @@ import java.time.LocalDate;
 public class LeaveModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id; // Unique identifier
+    private long id; // Identificador único
 
-    private long employeeId; // Reference to the employee
-    private LocalDate startDate; // Leave start date
-    private LocalDate endDate; // Leave end date
+    private long employeeId; // Referência ao funcionário
+    private LocalDate startDate; // Data de início da licença
+    private LocalDate endDate; // Data de término da licença
 
-    private String type; // Type of leave (medical, maternity, etc.)
-    private String reason; // Reason for leave (optional)
+    private String type; // Tipo de licença (médica, maternidade, etc.)
+    private String reason; // Motivo da licença (opcional)
 }

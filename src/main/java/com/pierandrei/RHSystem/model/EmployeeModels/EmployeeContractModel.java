@@ -14,22 +14,27 @@ import java.time.LocalDate;
 @Data
 @Entity
 public class EmployeeContractModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long id; // ID do contrato do funcionário
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate startDate; // Data de início do contrato
+    private LocalDate endDate; // Data de término do contrato
 
-    private TypeContract typeContract;
+    private TypeContract typeContract; // Tipo de contrato (CLT, PJ, etc.)
 
-    private String monthHours;
+    private String position; // Cargo do funcionário
 
-    private double wage;
+    private double wage; // Salário do funcionário
 
-    private ShiftContract shift;
+    private ShiftContract shift; // Turno de trabalho do funcionário
 
-    private StatusContract statusContract;
+    private StatusContract statusContract; // Status do contrato (ativo, encerrado, etc.)
 
-    private double bonus;
+    private double bonus; // Valor de bônus do funcionário
+
+    private double absentValue; // Valor associado a faltas
+
+    private int absentDays; // Número de dias de ausência
 }

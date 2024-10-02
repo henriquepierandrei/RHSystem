@@ -14,22 +14,16 @@ import java.util.Date;
 public class EmployeeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long id; // ID único do funcionário
 
+    // Dados Pessoais
+    private String name; // Nome do funcionário
+    private String email; // E-mail do funcionário
+    private Date dateBorn; // Data de nascimento do funcionário
+    private String cpf; // CPF do funcionário
+    private String phone; // Telefone do funcionário
+    private String rg; // RG do funcionário
 
-    // Person Data
-    private String name;
-    private String email;
-    private Date dateBorn;
-    private String cpf;
-    private String phone;
-    private String rg;
-
-
-    // Documents Data
-    private EmployeeContractModel employeeContractModel;
-
-
-
-
+    // Dados de Documentos
+    private EmployeeContractModel employeeContractModel; // Referência ao modelo de contrato do funcionário
 }
