@@ -12,4 +12,7 @@ public interface ContractRepository extends JpaRepository<EmployeeContractModel,
     Optional<EmployeeContractModel> findByCpfAndRg(String cpf, String rg);
 
     List<EmployeeModel> findByTypeContract(TypeContract typeContract);
+
+
+    List<EmployeeModel> findByWageLessThanEqual(Double value);
 }
