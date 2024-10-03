@@ -99,5 +99,14 @@ public class ContractService {
     }
 
 
+    // Excluir um contrato já existente
+    public void deleteContract(String cpf, String rg){
+        // Verificando se existe um contrato para o funcionário fornecido de acordo com se cpf e rg
+        EmployeeContractModel employeeContractModel = this.contractRepository.findByCpfAndRg(cpf, rg)
+                .orElseThrow(() -> new IllegalArgumentException("Contrato inexistente!"));
+        this.contractRepository.delete(employeeContractModel);
+    }
+
+
 
 }
