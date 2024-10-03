@@ -7,8 +7,6 @@ import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.io.FileNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -17,17 +15,17 @@ public class RegisterEmployee {
     private final EmployeeRepository employeeRepository;
     private final CpfValidator cpfValidator;
 
+    // Validação do RG, EMAIL & TELEFONE
     public boolean isValidEmployeeRg(String rg) {
-        return !employeeRepository.existsByRg(rg);  // Simplicando o retorno
+        return !employeeRepository.existsByRg(rg);
     }
-
     public boolean isValidEmployeeEmail(String email) {
         return !employeeRepository.existsByEmail(email);
     }
-
     public boolean isValidEmployeePhone(String phone) {
         return !employeeRepository.existsByPhone(phone);
     }
+
 
     // Registrar um funcionário
     public RegisterResponseDto registerNewEmployee(RegisterEmployeeDto registerEmployeeDto) {
