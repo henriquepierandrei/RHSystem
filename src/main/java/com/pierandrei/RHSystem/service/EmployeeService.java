@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterEmployee {
+public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final CpfValidator cpfValidator;
 
@@ -102,6 +102,9 @@ public class RegisterEmployee {
         this.employeeRepository.save(employeeModel);
         return "Dados do usuário atualizados com sucesso!";
     }
+
+
+
 
 
 
