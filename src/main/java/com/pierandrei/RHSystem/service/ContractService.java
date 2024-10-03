@@ -1,6 +1,7 @@
 package com.pierandrei.RHSystem.service;
 
 import com.pierandrei.RHSystem.dto.Inputs.RegisterContractDto;
+import com.pierandrei.RHSystem.dto.Inputs.UpdateContractDto;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.repository.ContractRepository;
@@ -51,4 +52,52 @@ public class ContractService {
         contractRepository.save(employeeContractModel);
         return employeeContractModel;
     }
+
+
+    // Atualizar contrato de trabalho do funcionário
+    public EmployeeContractModel updateContract(UpdateContractDto updateContractDto) {
+        // Verificando se existe um funcionário com CPF e RG fornecidos
+        EmployeeModel employeeModel = this.employeeRepository.findByCpfAndRg(updateContractDto.cpf(), updateContractDto.rg())
+                .orElseThrow(() -> new IllegalArgumentException("Funcionário inexistente!"));
+
+        // Verificando se existe um contrato para o funcionário fornecido
+        EmployeeContractModel employeeContractModel = this.contractRepository.findByCpfAndRg(updateContractDto.cpf(), updateContractDto.rg())
+                .orElseThrow(() -> new IllegalArgumentException("Contrato inexistente!"));
+
+        // Atualizando os dados do contrato, caso não estejam vazios/nulos
+        if (updateContractDto.position() != null && !updateContractDto.position().isEmpty()) {
+            employeeContractModel.setPosition(updateContractDto.position());
+        }
+
+        if (updateContractDto.typeContract() != null) {
+            employeeContractModel.setTypeContract(updateContractDto.typeContract());
+        }
+
+        if (updateContractDto.wage() != null) {
+            employeeContractModel.setWage(updateContractDto.wage());
+        }
+
+        if (updateContractDto.shiftContract() != null) {
+            employeeContractModel.setShift(updateContractDto.shiftContract());
+        }
+
+        if (updateContractDto.statusContract() != null) {
+            employeeContractModel.setStatusContract(updateContractDto.statusContract());
+        }
+
+        if (updateContractDto.bonus() != null) {
+            employeeContractModel.setBonus(updateContractDto.bonus());
+        }
+
+        if (updateContractDto.absentValue() != null) {
+            employeeContractModel.setAbsentValue(updateContractDto.absentValue());
+        }
+
+        // Salvando as alterações no banco de dados
+        this.contractRepository.save(employeeContractModel);
+        return employeeContractModel;
+    }
+
+
+
 }
