@@ -1,5 +1,6 @@
 package com.pierandrei.RHSystem.service;
 
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
@@ -24,6 +25,7 @@ public class AdminService {
 
     }
 
+
     // Busca por todos os funcionários de acordo com o tipo de contrato (CLT, PJ, etc.)
     public List<EmployeeModel> getEmployeesByContractType(TypeContract typeContract) {
         List<EmployeeModel> employeeModels = this.contractRepository.findByTypeContract(typeContract);
@@ -36,6 +38,7 @@ public class AdminService {
         return employeeModels;
     }
 
+
     // Busca funcionários de acordo com seus salários (EX: value = 5000, funcionários com até R$5000,00 de salário serão visualizados!)
     public List<EmployeeModel> getEmployeesByWage(Double value) {
         // Busca todos os funcionários com salários menores ou iguais ao valor especificado
@@ -44,6 +47,20 @@ public class AdminService {
         // Verificação para tratar caso não encontre funcionários
         if (employeeModels.isEmpty()) {
             throw new IllegalArgumentException("Nenhum funcionário encontrado com salários até: R$" + value);
+        }
+
+        return employeeModels;
+    }
+
+
+    // Busca funcionários de acordo com o status do contrato
+    public List<EmployeeModel> getEmployeesByStatus(StatusContract statusContract){
+        // Busca todos os funcionários com status especificado
+        List<EmployeeModel> employeeModels = this.contractRepository.findByStatusContract(statusContract);
+
+        // Verificação para tratar caso não encontre funcionários
+        if (employeeModels.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum funcionário encontrado com status: " + statusContract);
         }
 
         return employeeModels;
