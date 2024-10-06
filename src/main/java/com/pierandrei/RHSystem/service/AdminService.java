@@ -1,5 +1,6 @@
 package com.pierandrei.RHSystem.service;
 
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
@@ -65,6 +66,23 @@ public class AdminService {
 
         return employeeModels;
     }
+
+
+    // Busca funcionários de acordo com o turno de trabalho
+    public List<EmployeeModel> getEmployeesByShift(ShiftContract shiftContract){
+        // Busca todos os funcionários com status especificado
+        List<EmployeeModel> employeeModels = this.contractRepository.findByShift(shiftContract);
+
+        // Verificação para tratar caso não encontre funcionários
+        if (employeeModels.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum funcionário encontrado trabalhando no turno: " + shiftContract);
+        }
+
+        return employeeModels;
+    }
+}
+
+    
 
 
 

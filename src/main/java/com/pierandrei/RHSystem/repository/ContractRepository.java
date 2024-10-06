@@ -1,5 +1,6 @@
 package com.pierandrei.RHSystem.repository;
 
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
@@ -18,4 +19,6 @@ public interface ContractRepository extends JpaRepository<EmployeeContractModel,
     List<EmployeeModel> findByWageLessThanEqual(Double value);
 
     List<EmployeeModel> findByStatusContract(StatusContract statusContract);
+
+    List<EmployeeModel> findByShift(ShiftContract shiftContract);
 }
