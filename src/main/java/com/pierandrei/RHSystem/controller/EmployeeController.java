@@ -2,7 +2,7 @@ package com.pierandrei.RHSystem.controller;
 
 
 import com.pierandrei.RHSystem.dto.Inputs.LoginDto;
-import com.pierandrei.RHSystem.dto.Responses.ResponseDto;
+import com.pierandrei.RHSystem.dto.Responses.LoginResponseDto;
 import com.pierandrei.RHSystem.infra.security.TokenService;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.model.PayrollModels.InfoPayroll;
@@ -14,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/employee")
@@ -28,7 +27,7 @@ public class EmployeeController {
     public ResponseEntity<?> login(@RequestBody LoginDto body) {
         try {
             // Utiliza o método de login do service
-            ResponseDto response = employeeService.login(body);
+            LoginResponseDto response = employeeService.login(body);
 
             // Retorna sucesso com o token e informações do usuário
             return ResponseEntity.ok(response);

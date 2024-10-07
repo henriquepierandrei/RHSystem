@@ -1,7 +1,9 @@
 package com.pierandrei.RHSystem.service;
 
 import com.pierandrei.RHSystem.dto.Inputs.LoginDto;
-import com.pierandrei.RHSystem.dto.Responses.ResponseDto;
+import com.pierandrei.RHSystem.dto.Inputs.RegisterDto;
+import com.pierandrei.RHSystem.dto.Responses.LoginResponseDto;
+import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.infra.security.TokenService;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.model.PayrollModels.InfoPayroll;
@@ -10,6 +12,8 @@ import com.pierandrei.RHSystem.repository.InfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +28,14 @@ public class EmployeeService {
     private final CpfValidator cpfValidator;
 
 
+
     // Obtém o histórico de informações
     public List<InfoPayroll> getSupport(long id){
         return this.infoRepository.findByEmployeeId(id);
     }
 
     // Login do funcionário
-    public ResponseDto login(LoginDto loginDto) {
+    public LoginResponseDto login(LoginDto loginDto) {
         Optional<EmployeeModel> user = employeeRepository.findByCpf(loginDto.cpf());
 
         // Verifica se o CPF está correto
@@ -48,15 +53,64 @@ public class EmployeeService {
         String token = this.tokenService.generateToken(user.get());
 
         // Retorna o token e informações do usuário
-        return new ResponseDto(token, user.get().getEmail(), user.get().getName());
+        return new LoginResponseDto(token, user.get().getEmail(), user.get().getName());
+    }
+
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email != null && email.matches(emailRegex);
+    }
+
+    private boolean isValidPhone(String phone) {
+        // Exemplo simples: verifica se o telefone contém apenas dígitos e tem um tamanho específico (ex: 10 ou 11 dígitos)
+        return phone != null && phone.matches("\\d{10,11}");
     }
 
 
 
 
+    public ResponseRegisterDto register(RegisterDto body) {
+        // Verifica se já existe um funcionário com o mesmo CPF e RG
+        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(body.cpf(), body.rg());
 
+        if (employeeModel.isEmpty()) {
+            // Valida o CPF antes de prosseguir
+            if (!this.cpfValidator.isValid(body.cpf())) {
+                throw new IllegalArgumentException("CPF Inválido!");
+            }
 
+            // Cria um novo funcionário
+            EmployeeModel newEmployee = new EmployeeModel();
+            newEmployee.setRg(passwordEncoder.encode(body.rg())); // Verifique se você realmente deseja codificar o RG
+            newEmployee.setEmail(body.email());
+            newEmployee.setName(body.name());
+            newEmployee.setPhone(body.phone());
+            newEmployee.setDateBorn(body.dateBorn());
+            newEmployee.setCpf(body.cpf());
 
+            // Gera o token para o novo funcionário
+            String token = this.tokenService.generateToken(newEmployee);
+
+            // Validações adicionais para e-mail e telefone
+            if (!isValidEmail(body.email())) {
+                throw new IllegalArgumentException("E-mail inválido!");
+            }
+
+            if (!isValidPhone(body.phone())) {
+                throw new IllegalArgumentException("Número de telefone inválido!");
+            }
+
+            // Salva o novo funcionário no banco de dados
+            this.employeeRepository.save(newEmployee);
+
+            // Retorna o DTO com os dados do registro
+            return new ResponseRegisterDto(token, body.name(), body.cpf(), body.rg());
+        }
+
+        // Exceção lançada caso o CPF e RG já estejam cadastrados
+        throw new IllegalArgumentException("Já existe um funcionário com o CPF e RG cadastrados!");
+    }
 
 
 
