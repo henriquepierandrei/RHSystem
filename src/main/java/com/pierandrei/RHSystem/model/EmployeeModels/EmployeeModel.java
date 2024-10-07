@@ -1,12 +1,6 @@
 package com.pierandrei.RHSystem.model.EmployeeModels;
-
-import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDate;
 
 @Data
@@ -18,12 +12,24 @@ public class EmployeeModel {
 
     // Dados Pessoais
     private String name; // Nome do funcionário
-    private String email; // E-mail do funcionário
+
+    @Column(unique = true, nullable = false)
+    private String email; // E-mail do funcionário (único e não nulo)
+
     private LocalDate dateBorn; // Data de nascimento do funcionário
-    private String cpf; // CPF do funcionário
+
+    @Column(unique = true, nullable = false)
+    private String cpf; // CPF do funcionário (único e não nulo)
+
     private String phone; // Telefone do funcionário
     private String rg; // RG do funcionário
 
     // Dados de Documentos
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private EmployeeContractModel employeeContractModel; // Referência ao modelo de contrato do funcionário
+
+
+
+    private boolean isAdmin = false;       // ROLE de ADMIN
 }

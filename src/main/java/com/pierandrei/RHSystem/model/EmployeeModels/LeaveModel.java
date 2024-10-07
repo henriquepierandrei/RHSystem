@@ -16,8 +16,7 @@ public class LeaveModel {
     private long id; // Identificador único
 
     private long employeeId; // Referência ao funcionário
-    private LocalDate startDate; // Data de início da licença
-    private LocalDate endDate; // Data de término da licença
+    private int missedBusinessDays;           // Dias úteis faltados
 
     private String type; // Tipo de licença (médica, maternidade, etc.)
     private String reason; // Motivo da licença (opcional)
