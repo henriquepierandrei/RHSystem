@@ -2,7 +2,7 @@ package com.pierandrei.RHSystem.service;
 
 import com.pierandrei.RHSystem.dto.Inputs.RegisterEmployeeDto;
 import com.pierandrei.RHSystem.dto.Inputs.UpdateEmailAndPhoneDto;
-import com.pierandrei.RHSystem.dto.Responses.RegisterResponseDto;
+import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
@@ -46,37 +46,6 @@ public class AdminService {
     }
 
 
-    @Transactional
-    // Registrar um funcionário
-    public RegisterResponseDto registerNewEmployee(RegisterEmployeeDto registerEmployeeDto) {
-        // Validações para evitar duplicidade de dados
-        if (!cpfValidator.isValid(registerEmployeeDto.cpf()) || !isValidEmployeeRg(registerEmployeeDto.rg())) {
-            throw new IllegalArgumentException("CPF ou RG já existentes!");
-        }
-
-        if (!isValidEmployeeEmail(registerEmployeeDto.email())) {
-            throw new IllegalArgumentException("Esse email já existe!");
-        }
-
-        if (!isValidEmployeePhone(registerEmployeeDto.phone())) {
-            throw new IllegalArgumentException("Esse número de telefone já existe!");
-        }
-
-        // Criar nova entidade de funcionário
-        EmployeeModel employeeModel = new EmployeeModel();
-        employeeModel.setRg(registerEmployeeDto.rg());
-        employeeModel.setCpf(registerEmployeeDto.cpf());
-        employeeModel.setName(registerEmployeeDto.name());
-        employeeModel.setDateBorn(registerEmployeeDto.dateBorn());
-        employeeModel.setEmail(registerEmployeeDto.email());
-        employeeModel.setPhone(registerEmployeeDto.phone());
-
-        // Salvar no repositório
-        employeeRepository.save(employeeModel);
-
-        // Retornar resposta formatada
-        return new RegisterResponseDto(registerEmployeeDto.name(), registerEmployeeDto.cpf(), registerEmployeeDto.rg());
-    }
 
 
     // Deletar um funcionário

@@ -71,8 +71,8 @@ public class EmployeeService {
 
 
     public ResponseRegisterDto register(RegisterDto body) {
-        // Verifica se já existe um funcionário com o mesmo CPF e RG
-        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(body.cpf(), body.rg());
+        // Verifica se já existe um funcionário com o mesmo CPF
+        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpf(body.cpf());
 
         if (employeeModel.isEmpty()) {
             // Valida o CPF antes de prosseguir
