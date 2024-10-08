@@ -38,7 +38,7 @@ public class EmployeeService {
         return this.infoRepository.findByEmployeeId(id);
     }
 
-    // Login do funcionário
+    // Login do funcionário (CHECK)
     public LoginResponseDto login(LoginDto loginDto) {
         Optional<EmployeeModel> user = employeeRepository.findByCpf(loginDto.cpf());
 
@@ -72,7 +72,7 @@ public class EmployeeService {
     }
 
 
-    // Registro do funcionário
+    // Registro do funcionário (CHECK)
     public ResponseRegisterDto register(RegisterDto body) {
         // Verifica se já existe um funcionário com o mesmo CPF
         Optional<EmployeeModel> employeeModel = employeeRepository.findByCpf(body.cpf());
