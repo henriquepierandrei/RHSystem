@@ -18,6 +18,6 @@ public class CustomUserDetails implements UserDetailsService {
         EmployeeModel employeeModel = authenticationService.loadEmployeeByCpf(cpf);
         var authorities = authenticationService.getAuthorities(employeeModel);
 
-        return new org.springframework.security.core.userdetails.User(employeeModel.getCpf(), employeeModel.getRg(), authorities);
+        return new org.springframework.security.core.userdetails.User(employeeModel.getCpf(), employeeModel.getPassword(), authorities);
     }
 }

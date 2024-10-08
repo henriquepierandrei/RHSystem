@@ -98,18 +98,19 @@ public class AdminService {
 
 
     // Deletar um funcionário e seu contrato
-    public void deleteEmployee(EmployeeModel employeeModel) {
-
+    public Object deleteEmployee(EmployeeModel employeeModel) {
         try {
             Optional<EmployeeContractModel> employeeContractModel = this.contractRepository.findByCpfAndRg(employeeModel.getCpf(), employeeModel.getRg());
+            this.employeeRepository.delete(employeeModel);
             if (employeeContractModel.isPresent()){
-                this.employeeRepository.delete(employeeModel);
+                this.contractRepository.delete(employeeContractModel.get());
             }
 
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao remover o funcionário: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao remover o funcionário e contrato: " + e.getMessage(), e);
         }
+        return "Funcionário e contrato deletado!";
 
     }
 
