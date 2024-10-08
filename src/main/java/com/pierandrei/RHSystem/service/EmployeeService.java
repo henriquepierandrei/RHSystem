@@ -2,11 +2,14 @@ package com.pierandrei.RHSystem.service;
 
 import com.pierandrei.RHSystem.dto.Inputs.LoginDto;
 import com.pierandrei.RHSystem.dto.Inputs.RegisterDto;
+import com.pierandrei.RHSystem.dto.Responses.EmployeeContractResponseDto;
 import com.pierandrei.RHSystem.dto.Responses.LoginResponseDto;
 import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.infra.security.TokenService;
+import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.model.PayrollModels.InfoPayroll;
+import com.pierandrei.RHSystem.repository.ContractRepository;
 import com.pierandrei.RHSystem.repository.EmployeeRepository;
 import com.pierandrei.RHSystem.repository.InfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final ContractRepository contractRepository;
     private final PasswordEncoder passwordEncoder;
     private final InfoRepository infoRepository;
     private final TokenService tokenService;
@@ -68,7 +72,7 @@ public class EmployeeService {
     }
 
 
-
+    // Registro do funcionário
     public ResponseRegisterDto register(RegisterDto body) {
         // Verifica se já existe um funcionário com o mesmo CPF
         Optional<EmployeeModel> employeeModel = employeeRepository.findByCpf(body.cpf());
@@ -109,6 +113,21 @@ public class EmployeeService {
 
         // Exceção lançada caso o CPF e RG já estejam cadastrados
         throw new IllegalArgumentException("Já existe um funcionário com o CPF e RG cadastrados!");
+    }
+
+
+    // Buscar Contrato do funcionário
+    public EmployeeContractResponseDto getContract(String cpf, String rg){
+        // Verificando se existe um contrato para o cpf e rg do funcionário fornecidos!
+        Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpfAndRg(cpf, rg);
+        if (employeeContractModelOptional.isEmpty()) throw new IllegalArgumentException("Não existe nenhum contrato registrado!");
+
+
+        EmployeeContractModel employeeContractModel = employeeContractModelOptional.get();
+        return new EmployeeContractResponseDto(employeeContractModel.getCpf(),employeeContractModel.getRg(), employeeContractModel.getStartDate(),
+                employeeContractModel.getEndDate(),employeeContractModel.getTypeContract(),employeeContractModel.getPosition(),
+                employeeContractModel.getWage(),employeeContractModel.getShift(), employeeContractModel.getStatusContract(),
+                employeeContractModel.getBonus(),employeeContractModel.getAbsentValue());
     }
 
 

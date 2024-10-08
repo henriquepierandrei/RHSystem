@@ -3,9 +3,11 @@ package com.pierandrei.RHSystem.controller;
 
 import com.pierandrei.RHSystem.dto.Inputs.LoginDto;
 import com.pierandrei.RHSystem.dto.Inputs.RegisterDto;
+import com.pierandrei.RHSystem.dto.Responses.EmployeeContractResponseDto;
 import com.pierandrei.RHSystem.dto.Responses.LoginResponseDto;
 import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.infra.security.TokenService;
+import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.model.PayrollModels.InfoPayroll;
 import com.pierandrei.RHSystem.service.EmployeeService;
@@ -25,14 +27,28 @@ public class EmployeeController {
     private final TokenService tokenService;
 
 
-
-
-    @GetMapping
+    @GetMapping("/payments")
     public ResponseEntity getSupport(@AuthenticationPrincipal EmployeeModel employeeModel) {
         List<InfoPayroll> infoPayrolls = this.employeeService.getSupport(employeeModel.getId());
         if (infoPayrolls.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não existe nenhum registro de pagamento!");
 
         return ResponseEntity.status(HttpStatus.OK).body(infoPayrolls);
 
+    }
+
+
+    @GetMapping("/contract")
+    public ResponseEntity getContract(@AuthenticationPrincipal EmployeeModel employeeModel){
+        try {
+            // Utilizando o dto de response para obter o contrato
+            EmployeeContractResponseDto response =  this.employeeService.getContract(employeeModel.getCpf(), employeeModel.getRg());
+
+            // Retorna sucesso com o contrato
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            // Retorna erro com a mensagem apropriada (Não existir contrato)
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
