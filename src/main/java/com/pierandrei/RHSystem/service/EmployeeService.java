@@ -60,12 +60,13 @@ public class EmployeeService {
         return new LoginResponseDto(token, user.get().getEmail(), user.get().getName());
     }
 
-
+    // Validar Email (USADO)
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         return email != null && email.matches(emailRegex);
     }
 
+    // Validar Telefone (USADO)
     private boolean isValidPhone(String phone) {
         // Exemplo simples: verifica se o telefone contém apenas dígitos e tem um tamanho específico (ex: 10 ou 11 dígitos)
         return phone != null && phone.matches("\\d{10,11}");
