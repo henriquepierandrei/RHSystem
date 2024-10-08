@@ -43,7 +43,7 @@ public class EmployeeController {
     public ResponseEntity getContract(@AuthenticationPrincipal EmployeeModel employeeModel){
         try {
             // Utilizando o dto de response para obter o contrato
-            EmployeeContractResponseDto response =  this.employeeService.getContract(employeeModel.getCpf(), employeeModel);
+            EmployeeContractResponseDto response =  this.employeeService.getContract(employeeModel);
 
             // Retorna sucesso com o contrato
             return ResponseEntity.ok(response);

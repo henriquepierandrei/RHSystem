@@ -36,10 +36,7 @@ public class AdminService {
 
 
 
-    // Validação do RG, EMAIL & TELEFONE
-    public boolean isValidEmployeeRg(String rg) {
-        return !employeeRepository.existsByRg(rg);
-    }
+    // Validação do EMAIL & TELEFONE
     public boolean isValidEmployeeEmail(String email) {
         return !employeeRepository.existsByEmail(email);
     }
@@ -52,16 +49,16 @@ public class AdminService {
     // Criar contrato do funcionário (CHECK)
     public EmployeeContractResponseDto createContract(RegisterContractDto registerContractDto) throws Exception {
         // Verifica se existe um funcionário com esse cpf no sistema
-        Optional<EmployeeModel> employeeModelOptional = this.employeeRepository.findByCpf(registerContractDto.cpf());
+        Optional<EmployeeModel> employeeModelOptional = this.employeeRepository.findByCpfAndRg(registerContractDto.cpf(), registerContractDto.rg());
         if (employeeModelOptional.isEmpty()){
-            throw new IllegalArgumentException("Não existe nenhum funcionário com o CPF fornecido!");
+            throw new IllegalArgumentException("Não existe nenhum funcionário com o CPF e RG fornecido!");
         }
 
         // Verificar se já existe um contrato com o CPF fornecido
-        Optional<EmployeeContractModel> existingContract = contractRepository.findByCpf(registerContractDto.cpf());
+        Optional<EmployeeContractModel> existingContract = contractRepository.findByCpfAndRg(registerContractDto.cpf(), registerContractDto.rg());
 
         if (existingContract.isPresent()) {
-            throw new IllegalArgumentException("Já existe um contrato com esse CPF");
+            throw new IllegalArgumentException("Já existe um contrato com esse CPF e RG!");
         }
 
 
@@ -69,6 +66,7 @@ public class AdminService {
         // Criar o modelo de contrato
         EmployeeContractModel newContract = new EmployeeContractModel();
         newContract.setCpf(registerContractDto.cpf());
+        newContract.setRg(registerContractDto.rg());
         newContract.setStartDate(registerContractDto.startDate());
         newContract.setEndDate(null);  // Se não tiver uma data de término no momento
         newContract.setTypeContract(registerContractDto.typeContract());
@@ -85,6 +83,7 @@ public class AdminService {
         // Retornar o DTO de resposta com os dados salvos
         return new EmployeeContractResponseDto(
                 savedContract.getCpf(),
+                savedContract.getRg(),
                 savedContract.getStartDate(),
                 savedContract.getEndDate(),
                 savedContract.getTypeContract(),
@@ -98,10 +97,16 @@ public class AdminService {
     }
 
 
-    // Deletar um funcionário
+    // Deletar um funcionário e seu contrato
     public void deleteEmployee(EmployeeModel employeeModel) {
+
         try {
-            this.employeeRepository.delete(employeeModel);
+            Optional<EmployeeContractModel> employeeContractModel = this.contractRepository.findByCpfAndRg(employeeModel.getCpf(), employeeModel.getRg());
+            if (employeeContractModel.isPresent()){
+                this.employeeRepository.delete(employeeModel);
+            }
+
+
         } catch (Exception e) {
             throw new RuntimeException("Erro ao remover o funcionário: " + e.getMessage(), e);
         }

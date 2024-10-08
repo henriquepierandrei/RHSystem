@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public record EmployeeContractResponseDto(
         String cpf,
+        String rg,
         LocalDate startDate,
         LocalDate endDate,
         TypeContract typeContract,

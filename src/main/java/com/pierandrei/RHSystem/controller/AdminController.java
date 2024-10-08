@@ -30,4 +30,8 @@ public class AdminController {
     }
 
 
+    // Deletar contrato do funcionário
+    public ResponseEntity deleteEmployeeAndContract
+
+
 }

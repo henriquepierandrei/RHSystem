@@ -47,13 +47,13 @@ public class EmployeeService {
             throw new IllegalArgumentException("CPF incorreto!");
         }
 
-        // Verifica se o RG está correto
-        if (!passwordEncoder.matches(loginDto.rg(), user.get().getRg())) {
-            throw new IllegalArgumentException("RG incorreto!");
+        // Verifica se a senha está correta
+        if (!passwordEncoder.matches(loginDto.password(), user.get().getPassword())) {
+            throw new IllegalArgumentException("Senha incorreta!");
         }
 
 
-        // Gera o token se o CPF e RG forem válidos
+        // Gera o token se o CPF e senha forem válidos
         String token = this.tokenService.generateToken(user.get());
 
         // Retorna o token e informações do usuário
@@ -76,7 +76,7 @@ public class EmployeeService {
     // Registro do funcionário (CHECK)
     public ResponseRegisterDto register(RegisterDto body) {
         // Verifica se já existe um funcionário com o mesmo CPF
-        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpf(body.cpf());
+        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(body.cpf(), body.rg());
 
         if (employeeModel.isEmpty()) {
             // Valida o CPF antes de prosseguir
@@ -86,12 +86,13 @@ public class EmployeeService {
 
             // Cria um novo funcionário
             EmployeeModel newEmployee = new EmployeeModel();
-            newEmployee.setRg(passwordEncoder.encode(body.rg())); // Verifique se você realmente deseja codificar o RG
+            newEmployee.setRg(body.rg());
             newEmployee.setEmail(body.email());
             newEmployee.setName(body.name());
             newEmployee.setPhone(body.phone());
             newEmployee.setDateBorn(body.dateBorn());
             newEmployee.setCpf(body.cpf());
+            newEmployee.setPassword(passwordEncoder.encode(body.password()));
 
             // Gera o token para o novo funcionário
             String token = this.tokenService.generateToken(newEmployee);
@@ -118,13 +119,10 @@ public class EmployeeService {
 
 
     // Obtém o contrato do funcionário (CHECK)
-    public EmployeeContractResponseDto getContract(String cpf, EmployeeModel employeeModel) {
-        // Buscar contrato pelo CPF
-        Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpf(cpf);
+    public EmployeeContractResponseDto getContract(EmployeeModel employeeModel) {
+        // Buscar contrato pelo CPF e RG
+        Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpfAndRg(employeeModel.getCpf(), employeeModel.getRg());
 
-        if (!employeeModel.getCpf().equals(cpf)){
-            throw new IllegalArgumentException("Esse CPF não te pertence!");
-        }
 
         if (employeeContractModelOptional.isEmpty()) {
             throw new IllegalArgumentException("Não existe nenhum contrato registrado!");
@@ -135,6 +133,7 @@ public class EmployeeService {
 
         return new EmployeeContractResponseDto(
                 employeeContractModel.getCpf(),
+                employeeContractModel.getRg(),
                 employeeContractModel.getStartDate(),
                 employeeContractModel.getEndDate(),
                 employeeContractModel.getTypeContract(),

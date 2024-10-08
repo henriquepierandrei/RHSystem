@@ -1,5 +1,6 @@
 package com.pierandrei.RHSystem.model.EmployeeModels;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import java.time.LocalDate;
 
@@ -29,7 +30,8 @@ public class EmployeeModel {
     @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private EmployeeContractModel employeeContractModel; // Referência ao modelo de contrato do funcionário
 
-
+    @NotEmpty
+    private String password;
 
     private boolean isAdmin = false;       // ROLE de ADMIN
 }
