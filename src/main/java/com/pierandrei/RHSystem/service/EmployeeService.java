@@ -116,18 +116,33 @@ public class EmployeeService {
     }
 
 
-    // Buscar Contrato do funcionário
-    public EmployeeContractResponseDto getContract(String cpf, String rg){
-        // Verificando se existe um contrato para o cpf e rg do funcionário fornecidos!
-        Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpfAndRg(cpf, rg);
-        if (employeeContractModelOptional.isEmpty()) throw new IllegalArgumentException("Não existe nenhum contrato registrado!");
+    public EmployeeContractResponseDto getContract(String cpf, EmployeeModel employeeModel) {
+        // Buscar contrato pelo CPF
+        Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpf(cpf);
 
+        if (!employeeModel.getCpf().equals(cpf)){
+            throw new IllegalArgumentException("Esse CPF não te pertence!");
+        }
+
+        if (employeeContractModelOptional.isEmpty()) {
+            throw new IllegalArgumentException("Não existe nenhum contrato registrado!");
+        }
 
         EmployeeContractModel employeeContractModel = employeeContractModelOptional.get();
-        return new EmployeeContractResponseDto(employeeContractModel.getCpf(),employeeContractModel.getRg(), employeeContractModel.getStartDate(),
-                employeeContractModel.getEndDate(),employeeContractModel.getTypeContract(),employeeContractModel.getPosition(),
-                employeeContractModel.getWage(),employeeContractModel.getShift(), employeeContractModel.getStatusContract(),
-                employeeContractModel.getBonus(),employeeContractModel.getAbsentValue());
+
+
+        return new EmployeeContractResponseDto(
+                employeeContractModel.getCpf(),
+                employeeContractModel.getStartDate(),
+                employeeContractModel.getEndDate(),
+                employeeContractModel.getTypeContract(),
+                employeeContractModel.getPosition(),
+                employeeContractModel.getWage(),
+                employeeContractModel.getShift(),
+                employeeContractModel.getStatusContract(),
+                employeeContractModel.getBonus(),
+                employeeContractModel.getAbsentValue()
+        );
     }
 
 

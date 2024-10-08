@@ -21,4 +21,6 @@ public interface ContractRepository extends JpaRepository<EmployeeContractModel,
     List<EmployeeModel> findByStatusContract(StatusContract statusContract);
 
     List<EmployeeModel> findByShift(ShiftContract shiftContract);
+
+    Optional<EmployeeContractModel> findByCpf(String cpf);
 }

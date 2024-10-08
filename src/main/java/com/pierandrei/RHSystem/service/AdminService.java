@@ -1,7 +1,9 @@
 package com.pierandrei.RHSystem.service;
 
+import com.pierandrei.RHSystem.dto.Inputs.RegisterContractDto;
 import com.pierandrei.RHSystem.dto.Inputs.RegisterEmployeeDto;
 import com.pierandrei.RHSystem.dto.Inputs.UpdateEmailAndPhoneDto;
+import com.pierandrei.RHSystem.dto.Responses.EmployeeContractResponseDto;
 import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
@@ -46,6 +48,48 @@ public class AdminService {
     }
 
 
+
+    // Criar contrato do funcionário
+    public EmployeeContractResponseDto createContract(RegisterContractDto registerContractDto) throws Exception {
+        // Verificar se já existe um contrato com o CPF e o RG fornecidos
+        Optional<EmployeeContractModel> existingContract = contractRepository.findByCpfAndRg(registerContractDto.cpf(), registerContractDto.rg());
+
+        if (existingContract.isPresent()) {
+            throw new IllegalArgumentException("Já existe um contrato com esse CPF e RG.");
+        }
+
+
+
+        // Criar o modelo de contrato
+        EmployeeContractModel newContract = new EmployeeContractModel();
+        newContract.setCpf(registerContractDto.cpf());
+        newContract.setStartDate(registerContractDto.startDate());
+        newContract.setEndDate(null);  // Se não tiver uma data de término no momento
+        newContract.setTypeContract(registerContractDto.typeContract());
+        newContract.setPosition(registerContractDto.position());
+        newContract.setWage(registerContractDto.wage());
+        newContract.setShift(registerContractDto.shiftContract());
+        newContract.setStatusContract(registerContractDto.statusContract());
+        newContract.setBonus(registerContractDto.bonus());
+        newContract.setAbsentValue(registerContractDto.wage() / 20);
+
+        // Salvar o contrato no banco de dados
+        EmployeeContractModel savedContract = contractRepository.save(newContract);
+
+        // Retornar o DTO de resposta com os dados salvos
+        return new EmployeeContractResponseDto(
+                savedContract.getCpf(),
+                savedContract.getStartDate(),
+                savedContract.getEndDate(),
+                savedContract.getTypeContract(),
+                savedContract.getPosition(),
+                savedContract.getWage(),
+                savedContract.getShift(),
+                savedContract.getStatusContract(),
+                savedContract.getBonus(),
+                savedContract.getAbsentValue()
+        );
+    }
 
 
     // Deletar um funcionário
