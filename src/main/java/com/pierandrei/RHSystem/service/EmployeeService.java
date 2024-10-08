@@ -33,7 +33,7 @@ public class EmployeeService {
 
 
 
-    // Obtém o histórico de informações
+    // Obtém o histórico de informações (CHECK)
     public List<InfoPayroll> getSupport(long id){
         return this.infoRepository.findByEmployeeId(id);
     }
@@ -116,6 +116,7 @@ public class EmployeeService {
     }
 
 
+    // Obtém o contrato do funcionário (CHECK)
     public EmployeeContractResponseDto getContract(String cpf, EmployeeModel employeeModel) {
         // Buscar contrato pelo CPF
         Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpf(cpf);

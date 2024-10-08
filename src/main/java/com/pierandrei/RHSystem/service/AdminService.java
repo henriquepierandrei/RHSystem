@@ -49,13 +49,19 @@ public class AdminService {
 
 
 
-    // Criar contrato do funcionário
+    // Criar contrato do funcionário (CHECK)
     public EmployeeContractResponseDto createContract(RegisterContractDto registerContractDto) throws Exception {
-        // Verificar se já existe um contrato com o CPF e o RG fornecidos
-        Optional<EmployeeContractModel> existingContract = contractRepository.findByCpfAndRg(registerContractDto.cpf(), registerContractDto.rg());
+        // Verifica se existe um funcionário com esse cpf no sistema
+        Optional<EmployeeModel> employeeModelOptional = this.employeeRepository.findByCpf(registerContractDto.cpf());
+        if (employeeModelOptional.isEmpty()){
+            throw new IllegalArgumentException("Não existe nenhum funcionário com o CPF fornecido!");
+        }
+
+        // Verificar se já existe um contrato com o CPF fornecido
+        Optional<EmployeeContractModel> existingContract = contractRepository.findByCpf(registerContractDto.cpf());
 
         if (existingContract.isPresent()) {
-            throw new IllegalArgumentException("Já existe um contrato com esse CPF e RG.");
+            throw new IllegalArgumentException("Já existe um contrato com esse CPF");
         }
 
 

@@ -27,6 +27,7 @@ public class EmployeeController {
     private final TokenService tokenService;
 
 
+    // Obtém o relatório dos pagamentos
     @GetMapping("/payments")
     public ResponseEntity getSupport(@AuthenticationPrincipal EmployeeModel employeeModel) {
         List<InfoPayroll> infoPayrolls = this.employeeService.getSupport(employeeModel.getId());
@@ -37,6 +38,7 @@ public class EmployeeController {
     }
 
 
+    // Obtém o contrato atual do funcionário
     @GetMapping("/contract")
     public ResponseEntity getContract(@AuthenticationPrincipal EmployeeModel employeeModel){
         try {
