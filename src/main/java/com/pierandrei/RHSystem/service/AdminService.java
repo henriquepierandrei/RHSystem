@@ -46,7 +46,6 @@ public class AdminService {
     }
 
 
-
     // Criar contrato do funcionário (CHECK)
     public EmployeeContractResponseDto createContract(RegisterContractDto registerContractDto) throws Exception {
         // Verifica se existe um funcionário com esse cpf no sistema
@@ -94,7 +93,6 @@ public class AdminService {
                 savedContract.getAbsentValue()
         );
     }
-
 
     // Deletar um funcionário e seu contrato (CHECK)
     public Object deleteEmployee(EmployeeModel employeeModel) {
@@ -149,12 +147,12 @@ public class AdminService {
 
 
 
+
     // Busca por todos os funcionários (CHECK)
     public List<EmployeeModel> getAllEmployee(){
         return this.employeeRepository.findAll();
 
     }
-
 
     // Busca por todos os funcionários pelo tipo do contrato (CHECK)
     public Page<EmployeeModel> getEmployeesByContractType(TypeContract typeContract, Pageable pageable) {
@@ -174,7 +172,6 @@ public class AdminService {
         return new PageImpl<>(employees, pageable, employeeContracts.getTotalElements());
     }
 
-
     // Busca funcionários de acordo com seus salários (EX: value = 5000, funcionários com até R$5000,00 de salário serão visualizados!) (CHECK)
     public Page<EmployeeModel> getEmployeesByWage(Double value, Pageable pageable) {
         // Busca todos os funcionários com salários menores ou iguais ao valor especificado
@@ -192,10 +189,6 @@ public class AdminService {
 
         return new PageImpl<>(employees, pageable, employeeModels.getTotalElements());
     }
-
-
-
-
 
     // Busca funcionários de acordo com o status do contrato (CHECK)
     public Page<EmployeeModel> getEmployeesByStatus(StatusContract statusContract, Pageable pageable){
@@ -216,8 +209,6 @@ public class AdminService {
 
     }
 
-    
-
     // Busca funcionários de acordo com o turno de trabalho (CHECK)
     public Page<EmployeeModel> getEmployeesByShift(ShiftContract shiftContract,Pageable pageable){
         // Busca todos os funcionários com status especificado
@@ -236,57 +227,61 @@ public class AdminService {
     }
 
 
-    @Transactional
-    // Obtém a folha de pagamento
-    public PayrollModel getPayroll() {
-        // Obtendo todos os contratos de funcionários
-        List<EmployeeContractModel> employeeContractModels = this.contractRepository.findAll();
 
-        // Lista que armazenará as informações de pagamento de cada funcionário
-        List<InfoPayroll> infoPayrolls = new ArrayList<>();
 
-        PayrollModel payrollModel = new PayrollModel();
-        double total = 0; // Variável para somar o total pago na folha
+//    @Transactional
+//    // Obtém a folha de pagamento
+//    public PayrollModel getPayroll() {
+//        // Obtendo todos os contratos de funcionários
+//        List<EmployeeContractModel> employeeContractModels = this.contractRepository.findAll();
+//
+//        // Lista que armazenará as informações de pagamento de cada funcionário
+//        List<InfoPayroll> infoPayrolls = new ArrayList<>();
+//
+//        PayrollModel payrollModel = new PayrollModel();
+//        double total = 0; // Variável para somar o total pago na folha
+//
+//        // Iterando sobre todos os contratos dos funcionários
+//        for (EmployeeContractModel employeeContractModel : employeeContractModels) {
+//            InfoPayroll payroll = new InfoPayroll(); // Cria uma nova instância para cada funcionário
+//            payroll.setBonus(employeeContractModel.getBonus()); // Define o bônus do funcionário
+//            payroll.setEmployeeId(employeeContractModel.getId()); // Define o ID do funcionário
+//
+//            // Verifica se o funcionário tem faltas registradas
+//            Optional<LeaveModel> leaveModelOptional = this.leaveRepository.findByEmployeeId(employeeContractModel.getId());
+//
+//            if (leaveModelOptional.isPresent()) {
+//                // Se houver faltas, calcula o desconto baseado nos dias perdidos
+//                double dailyWage = employeeContractModel.getWage() / 20; // Supondo que sejam 20 dias úteis no mês
+//                double discount = dailyWage * leaveModelOptional.get().getMissedBusinessDays(); // Calcula o desconto com base nos dias perdidos
+//
+//                payroll.setDiscount(discount); // Define o valor do desconto no payroll
+//                payroll.setWage(employeeContractModel.getWage() - discount); // Define o salário subtraído pelo desconto
+//                total += payroll.getWage(); // Soma o salário ao total pago na folha
+//            } else {
+//                // Se o funcionário não tiver faltas, usa o salário completo
+//                payroll.setDiscount(0); // Sem desconto
+//                payroll.setWage(employeeContractModel.getWage()); // Salário integral
+//                total += payroll.getWage(); // Soma o salário ao total pago
+//            }
+//            payroll.setDate(LocalDate.now()); // Define a data atual
+//            // Salva as informações do payroll no banco de dados
+//            this.infoRepository.save(payroll);
+//            infoPayrolls.add(payroll); // Adiciona o payroll à lista para ser incluído na folha de pagamento
+//        }
+//
+//        // Define os valores no PayrollModel
+//        payrollModel.setEmployeesPayroll(infoPayrolls); // Define a lista de funcionários com seus pagamentos
+//        payrollModel.setPaymentDate(LocalDate.now()); // Define a data de pagamento como a data atual
+//        payrollModel.setPaidTotal(total); // Define o valor total pago na folha
+//
+//        // Salva a folha de pagamento no banco de dados
+//        this.payrollRepository.save(payrollModel);
+//
+//        return payrollModel; // Retorna o objeto PayrollModel preenchido
+//    }
 
-        // Iterando sobre todos os contratos dos funcionários
-        for (EmployeeContractModel employeeContractModel : employeeContractModels) {
-            InfoPayroll payroll = new InfoPayroll(); // Cria uma nova instância para cada funcionário
-            payroll.setBonus(employeeContractModel.getBonus()); // Define o bônus do funcionário
-            payroll.setEmployeeId(employeeContractModel.getId()); // Define o ID do funcionário
 
-            // Verifica se o funcionário tem faltas registradas
-            Optional<LeaveModel> leaveModelOptional = this.leaveRepository.findByEmployeeId(employeeContractModel.getId());
-
-            if (leaveModelOptional.isPresent()) {
-                // Se houver faltas, calcula o desconto baseado nos dias perdidos
-                double dailyWage = employeeContractModel.getWage() / 20; // Supondo que sejam 20 dias úteis no mês
-                double discount = dailyWage * leaveModelOptional.get().getMissedBusinessDays(); // Calcula o desconto com base nos dias perdidos
-
-                payroll.setDiscount(discount); // Define o valor do desconto no payroll
-                payroll.setWage(employeeContractModel.getWage() - discount); // Define o salário subtraído pelo desconto
-                total += payroll.getWage(); // Soma o salário ao total pago na folha
-            } else {
-                // Se o funcionário não tiver faltas, usa o salário completo
-                payroll.setDiscount(0); // Sem desconto
-                payroll.setWage(employeeContractModel.getWage()); // Salário integral
-                total += payroll.getWage(); // Soma o salário ao total pago
-            }
-            payroll.setDate(LocalDate.now()); // Define a data atual
-            // Salva as informações do payroll no banco de dados
-            this.infoRepository.save(payroll);
-            infoPayrolls.add(payroll); // Adiciona o payroll à lista para ser incluído na folha de pagamento
-        }
-
-        // Define os valores no PayrollModel
-        payrollModel.setEmployeesPayroll(infoPayrolls); // Define a lista de funcionários com seus pagamentos
-        payrollModel.setPaymentDate(LocalDate.now()); // Define a data de pagamento como a data atual
-        payrollModel.setPaidTotal(total); // Define o valor total pago na folha
-
-        // Salva a folha de pagamento no banco de dados
-        this.payrollRepository.save(payrollModel);
-
-        return payrollModel; // Retorna o objeto PayrollModel preenchido
-    }
 
 
 }

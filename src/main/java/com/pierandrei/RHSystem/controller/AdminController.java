@@ -179,6 +179,8 @@ public class AdminController {
 
 
 
+    // Atualizar o status do contrato do funcionário
+    public ResponseEntity updateStatusOfTheContract(@RequestParam(value = "cpf") String cpf, String rg)
 
 
 }
