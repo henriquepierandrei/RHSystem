@@ -112,7 +112,7 @@ public class AdminService {
     }
 
     @Transactional
-    // Atualizar informações de contato
+    // Atualizar informações de contato (CHECK)
     public String updatePhoneAndEmail(String cpf, String rg, String email, String phone) {
         Optional<EmployeeModel> employeeModelOptional = this.employeeRepository.findByCpfAndRg(
                 cpf,rg);

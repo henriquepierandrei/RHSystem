@@ -66,4 +66,10 @@ public class AdminController {
     }
 
 
+    // Buscar todos os funcionários
+    public ResponseEntity getAllEmployee(){
+
+    }
+
+
 }
