@@ -13,12 +13,16 @@ import com.pierandrei.RHSystem.model.PayrollModels.PayrollModel;
 import com.pierandrei.RHSystem.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +56,7 @@ public class AdminService {
         }
 
         // Verificar se já existe um contrato com o CPF fornecido
-        Optional<EmployeeContractModel> existingContract = contractRepository.findByCpfAndRg(registerContractDto.cpf(), registerContractDto.rg());
+        Optional<EmployeeContractModel> existingContract = this.contractRepository.findByEmployee(employeeModelOptional.get());
 
         if (existingContract.isPresent()) {
             throw new IllegalArgumentException("Já existe um contrato com esse CPF e RG!");
@@ -62,8 +66,7 @@ public class AdminService {
 
         // Criar o modelo de contrato
         EmployeeContractModel newContract = new EmployeeContractModel();
-        newContract.setCpf(registerContractDto.cpf());
-        newContract.setRg(registerContractDto.rg());
+        newContract.setEmployee(employeeModelOptional.get());
         newContract.setStartDate(registerContractDto.startDate());
         newContract.setEndDate(null);  // Se não tiver uma data de término no momento
         newContract.setTypeContract(registerContractDto.typeContract());
@@ -79,8 +82,7 @@ public class AdminService {
 
         // Retornar o DTO de resposta com os dados salvos
         return new EmployeeContractResponseDto(
-                savedContract.getCpf(),
-                savedContract.getRg(),
+                savedContract.getEmployee(),
                 savedContract.getStartDate(),
                 savedContract.getEndDate(),
                 savedContract.getTypeContract(),
@@ -97,7 +99,7 @@ public class AdminService {
     // Deletar um funcionário e seu contrato (CHECK)
     public Object deleteEmployee(EmployeeModel employeeModel) {
         try {
-            Optional<EmployeeContractModel> employeeContractModel = this.contractRepository.findByCpfAndRg(employeeModel.getCpf(), employeeModel.getRg());
+            Optional<EmployeeContractModel> employeeContractModel = this.contractRepository.findByEmployee(employeeModel);
             this.employeeRepository.delete(employeeModel);
             if (employeeContractModel.isPresent()){
                 this.contractRepository.delete(employeeContractModel.get());
@@ -153,56 +155,64 @@ public class AdminService {
 
     }
 
-    // Busca por todos os funcionários de acordo com o tipo de contrato (CLT, PJ, etc.)
-    public List<EmployeeModel> getEmployeesByContractType(TypeContract typeContract) {
-        List<EmployeeModel> employeeModels = this.contractRepository.findByTypeContract(typeContract);
 
-        // Verificação opcional para tratar caso não encontre funcionários
-        if (employeeModels.isEmpty()) {
+    // Busca por todos os funcionários pelo tipo do contrato
+    public Page<EmployeeModel> getEmployeesByContractType(TypeContract typeContract, Pageable pageable) {
+        // Busca por todos os contratos de acordo com o tipo
+        Page<EmployeeContractModel> employeeContracts = this.contractRepository.findByTypeContract(typeContract, pageable);
+
+        // Verificação opcional para tratar caso não encontre contratos
+        if (employeeContracts.isEmpty()) {
             throw new IllegalArgumentException("Nenhum funcionário encontrado para o tipo de contrato: " + typeContract);
         }
 
-        return employeeModels;
+        // Mapeia os contratos para os funcionários
+        List<EmployeeModel> employees = employeeContracts.stream()
+                .map(EmployeeContractModel::getEmployee) // Acessa o funcionário a partir do contrato
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(employees, pageable, employeeContracts.getTotalElements());
     }
 
-    // Busca funcionários de acordo com seus salários (EX: value = 5000, funcionários com até R$5000,00 de salário serão visualizados!)
-    public List<EmployeeModel> getEmployeesByWage(Double value) {
-        // Busca todos os funcionários com salários menores ou iguais ao valor especificado
-        List<EmployeeModel> employeeModels = this.contractRepository.findByWageLessThanEqual(value);
 
-        // Verificação para tratar caso não encontre funcionários
-        if (employeeModels.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum funcionário encontrado com salários até: R$" + value);
-        }
-
-        return employeeModels;
-    }
-
-    // Busca funcionários de acordo com o status do contrato
-    public List<EmployeeModel> getEmployeesByStatus(StatusContract statusContract){
-        // Busca todos os funcionários com status especificado
-        List<EmployeeModel> employeeModels = this.contractRepository.findByStatusContract(statusContract);
-
-        // Verificação para tratar caso não encontre funcionários
-        if (employeeModels.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum funcionário encontrado com status: " + statusContract);
-        }
-
-        return employeeModels;
-    }
-
-    // Busca funcionários de acordo com o turno de trabalho
-    public List<EmployeeModel> getEmployeesByShift(ShiftContract shiftContract){
-        // Busca todos os funcionários com status especificado
-        List<EmployeeModel> employeeModels = this.contractRepository.findByShift(shiftContract);
-
-        // Verificação para tratar caso não encontre funcionários
-        if (employeeModels.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum funcionário encontrado trabalhando no turno: " + shiftContract);
-        }
-
-        return employeeModels;
-    }
+//    // Busca funcionários de acordo com seus salários (EX: value = 5000, funcionários com até R$5000,00 de salário serão visualizados!)
+//    public List<EmployeeModel> getEmployeesByWage(Double value) {
+//        // Busca todos os funcionários com salários menores ou iguais ao valor especificado
+//        List<EmployeeContractModel> employeeModels = this.contractRepository.findByWageLessThanEqual(value);
+//
+//        // Verificação para tratar caso não encontre funcionários
+//        if (employeeModels.isEmpty()) {
+//            throw new IllegalArgumentException("Nenhum funcionário encontrado com salários até: R$" + value);
+//        }
+//
+//        return employeeModels;
+//    }
+//
+//    // Busca funcionários de acordo com o status do contrato
+//    public List<EmployeeModel> getEmployeesByStatus(StatusContract statusContract){
+//        // Busca todos os funcionários com status especificado
+//        List<EmployeeContractModel> employeeModels = this.contractRepository.findByStatusContract(statusContract);
+//
+//        // Verificação para tratar caso não encontre funcionários
+//        if (employeeModels.isEmpty()) {
+//            throw new IllegalArgumentException("Nenhum funcionário encontrado com status: " + statusContract);
+//        }
+//
+//        return employeeModels;
+//    }
+//
+//    // Busca funcionários de acordo com o turno de trabalho
+//    public List<EmployeeModel> getEmployeesByShift(ShiftContract shiftContract){
+//        // Busca todos os funcionários com status especificado
+//        List<EmployeeContractModel> employeeModels = this.contractRepository.findByShift(shiftContract);
+//
+//        // Verificação para tratar caso não encontre funcionários
+//        if (employeeModels.isEmpty()) {
+//            throw new IllegalArgumentException("Nenhum funcionário encontrado trabalhando no turno: " + shiftContract);
+//        }
+//
+//        return employeeModels;
+//    }
 
 
     @Transactional

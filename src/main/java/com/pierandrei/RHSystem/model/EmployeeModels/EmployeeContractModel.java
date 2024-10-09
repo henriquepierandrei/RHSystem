@@ -16,8 +16,10 @@ public class EmployeeContractModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; // ID do contrato do funcionário
 
-    private String cpf;     // CPF do funcionário
-    private String rg;              // RG do funcionário
+    @ManyToOne // Ou @OneToOne, dependendo da relação
+    @JoinColumn(name = "employee_id") // A chave estrangeira que liga a tabela de contratos à tabela de funcionários
+    private EmployeeModel employee;
+
 
     private LocalDate startDate; // Data de início do contrato
     private LocalDate endDate; // Data de término do contrato

@@ -2,6 +2,7 @@ package com.pierandrei.RHSystem.controller;
 
 import com.pierandrei.RHSystem.dto.Inputs.RegisterContractDto;
 import com.pierandrei.RHSystem.dto.Responses.EmployeeContractResponseDto;
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.repository.EmployeeRepository;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -83,6 +85,28 @@ public class AdminController {
         Page<EmployeeModel> employees = employeeRepository.findAll(pageable);
         return ResponseEntity.ok(employees);
     }
+
+
+    // Buscar todos os funcionários com paginação e ordenação definida através do tipo do contrato
+    @GetMapping("/employees/type")
+    public ResponseEntity getAllEmployeesByContract(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "typeContract") TypeContract typeContract) {
+
+        try {
+            // Define a ordenação (opcional)
+            Sort sort = Sort.by("id").ascending();
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            Page<EmployeeModel> employees = this.adminService.getEmployeesByContractType(typeContract, pageable);
+
+            return ResponseEntity.ok(employees);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
+        }
+    }
+
 
 
 

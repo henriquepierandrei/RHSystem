@@ -120,20 +120,21 @@ public class EmployeeService {
 
     // Obtém o contrato do funcionário (CHECK)
     public EmployeeContractResponseDto getContract(EmployeeModel employeeModel) {
-        // Buscar contrato pelo CPF e RG
-        Optional<EmployeeContractModel> employeeContractModelOptional = this.contractRepository.findByCpfAndRg(employeeModel.getCpf(), employeeModel.getRg());
 
 
-        if (employeeContractModelOptional.isEmpty()) {
+        // Verificar se já existe um contrato com o CPF fornecido
+        Optional<EmployeeContractModel> existingContract = this.contractRepository.findByEmployee(employeeModel);
+
+
+        if (existingContract.isEmpty()) {
             throw new IllegalArgumentException("Não existe nenhum contrato registrado!");
         }
 
-        EmployeeContractModel employeeContractModel = employeeContractModelOptional.get();
+        EmployeeContractModel employeeContractModel = existingContract.get();
 
 
         return new EmployeeContractResponseDto(
-                employeeContractModel.getCpf(),
-                employeeContractModel.getRg(),
+                employeeContractModel.getEmployee(),
                 employeeContractModel.getStartDate(),
                 employeeContractModel.getEndDate(),
                 employeeContractModel.getTypeContract(),

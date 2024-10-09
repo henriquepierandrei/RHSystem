@@ -1,6 +1,8 @@
 package com.pierandrei.RHSystem.repository;
 
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -17,4 +19,6 @@ public interface EmployeeRepository extends JpaRepository<EmployeeModel, Long> {
     Optional<EmployeeModel> findByCpfAndRg(String cpf, String rg);
 
     Optional<EmployeeModel> findByCpf(String cpf);
+
+
 }
