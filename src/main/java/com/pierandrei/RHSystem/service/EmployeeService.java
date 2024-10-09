@@ -76,9 +76,13 @@ public class EmployeeService {
     // Registro do funcionário (CHECK)
     public ResponseRegisterDto register(RegisterDto body) {
         // Verifica se já existe um funcionário com o mesmo CPF
-        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(body.cpf(), body.rg());
+        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpf(body.cpf());
 
-        if (employeeModel.isEmpty()) {
+        // Verifica se já existe um funcionário com o mesmo RG
+        Optional<EmployeeModel> employeeModel2 = employeeRepository.findByRg(body.rg());
+
+
+        if (employeeModel.isEmpty() && employeeModel2.isEmpty()) {
             // Valida o CPF antes de prosseguir
             if (!this.cpfValidator.isValid(body.cpf())) {
                 throw new IllegalArgumentException("CPF Inválido!");
@@ -92,6 +96,7 @@ public class EmployeeService {
             newEmployee.setPhone(body.phone());
             newEmployee.setDateBorn(body.dateBorn());
             newEmployee.setCpf(body.cpf());
+
             newEmployee.setPassword(passwordEncoder.encode(body.password()));
 
             // Gera o token para o novo funcionário

@@ -21,4 +21,5 @@ public interface EmployeeRepository extends JpaRepository<EmployeeModel, Long> {
     Optional<EmployeeModel> findByCpf(String cpf);
 
 
+    Optional<EmployeeModel> findByRg(String rg);
 }
