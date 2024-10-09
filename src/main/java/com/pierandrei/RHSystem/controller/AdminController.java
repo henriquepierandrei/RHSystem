@@ -8,6 +8,10 @@ import com.pierandrei.RHSystem.repository.EmployeeRepository;
 import com.pierandrei.RHSystem.service.AdminService;
 import com.pierandrei.RHSystem.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -66,10 +70,22 @@ public class AdminController {
     }
 
 
-    // Buscar todos os funcionários
-    public ResponseEntity getAllEmployee(){
+    // Buscar todos os funcionários com paginação e ordenação definida
+    @GetMapping("/employees")
+    public ResponseEntity<Page<EmployeeModel>> getAllEmployees(
+            @RequestParam(value = "page", defaultValue = "0") int page) {
 
+        // Define o tamanho da página e a ordenação padrão (ordenar por 'name' ascendente)
+        int size = 10; // Defina o tamanho fixo da página
+        Sort sort = Sort.by("name").ascending(); // Defina o campo e a ordem (ascendente)
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<EmployeeModel> employees = employeeRepository.findAll(pageable);
+        return ResponseEntity.ok(employees);
     }
+
+
+
 
 
 }

@@ -147,7 +147,7 @@ public class AdminService {
 
 
 
-    // Busca por todos os funcionários
+    // Busca por todos os funcionários (CHECK)
     public List<EmployeeModel> getAllEmployee(){
         return this.employeeRepository.findAll();
 
