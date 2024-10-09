@@ -7,6 +7,7 @@ import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
+import com.pierandrei.RHSystem.repository.ContractRepository;
 import com.pierandrei.RHSystem.repository.EmployeeRepository;
 import com.pierandrei.RHSystem.service.AdminService;
 import com.pierandrei.RHSystem.service.EmployeeService;
@@ -28,6 +29,7 @@ import java.util.Optional;
 public class AdminController {
     private final AdminService adminService;
     private final EmployeeRepository employeeRepository;
+    private final ContractRepository contractRepository;
 
     // Criar contrato do funcionário
     @PostMapping("/contract")
@@ -180,7 +182,35 @@ public class AdminController {
 
 
     // Atualizar o status do contrato do funcionário
-    public ResponseEntity updateStatusOfTheContract(@RequestParam(value = "cpf") String cpf, String rg)
+    @PutMapping("/update/contract/status")
+    public ResponseEntity updateStatusOfTheContract(
+            @RequestParam(value = "cpf") String cpf,
+            @RequestParam(value = "rg") String rg,
+            @RequestParam(value = "statusContract") StatusContract status) {
+
+        // Buscar funcionário pelo CPF e RG
+        Optional<EmployeeModel> employeeModelOptional = employeeRepository.findByCpfAndRg(cpf, rg);
+        if (employeeModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe nenhum funcionário com esse CPF e RG!");
+        }
+
+        EmployeeModel employeeModel = employeeModelOptional.get();
+
+        // Buscar contrato vinculado ao funcionário
+        Optional<EmployeeContractModel> employeeContractModelOptional = contractRepository.findByEmployee(employeeModel);
+        if (employeeContractModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe contrato vinculado com o funcionário!");
+        }
+
+        EmployeeContractModel employeeContractModel = employeeContractModelOptional.get();
+
+        // Atualizar e salvar o status do contrato
+        employeeContractModel.setStatusContract(status);
+        contractRepository.save(employeeContractModel);
+
+        return ResponseEntity.ok("Status modificado para: " + status);
+    }
+
 
 
 }
