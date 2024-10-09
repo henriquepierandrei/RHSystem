@@ -11,6 +11,7 @@ import com.pierandrei.RHSystem.repository.ContractRepository;
 import com.pierandrei.RHSystem.repository.EmployeeRepository;
 import com.pierandrei.RHSystem.service.AdminService;
 import com.pierandrei.RHSystem.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +33,7 @@ public class AdminController {
     private final ContractRepository contractRepository;
 
     // Criar contrato do funcionário
+    @Operation(summary = "Criar contrato do funcionário")
     @PostMapping("/contract")
     public ResponseEntity createContract(@RequestBody @Validated RegisterContractDto registerContractDto){
         try {
@@ -45,6 +47,7 @@ public class AdminController {
 
 
     // Deletar contrato do funcionário e funcionário
+    @Operation(summary = "Deletar contrato do funcionário e funcionário")
     @DeleteMapping("/delete")
     public ResponseEntity deleteEmployeeAndContract(@RequestParam(value = "cpf") String cpf, @RequestParam(value = "rg") String rg){
         Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(cpf, rg);
@@ -62,6 +65,7 @@ public class AdminController {
 
 
     // Atualizar informações de contato do funcionário
+    @Operation(summary = "Atualizar informações de contato do funcionário")
     @PutMapping("/update/contact")
     public ResponseEntity updateContactOfEmployee (@RequestParam(value = "cpf") String cpf, @RequestParam(value = "rg") String rg,
                                                    @RequestParam(value = "email", required = false) String email, @RequestParam(value = "phone", required = false) String phone){
@@ -78,6 +82,7 @@ public class AdminController {
 
 
     // Buscar todos os funcionários com paginação e ordenação definida
+    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida")
     @GetMapping("/employees")
     public ResponseEntity<Page<EmployeeModel>> getAllEmployees(
             @RequestParam(value = "page", defaultValue = "0") int page) {
@@ -94,6 +99,7 @@ public class AdminController {
 
 
     // Buscar todos os funcionários com paginação e ordenação definida através do tipo do contrato
+    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do tipo do contrato")
     @GetMapping("/employees/type")
     public ResponseEntity getAllEmployeesBType(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -116,6 +122,7 @@ public class AdminController {
 
 
     // Buscar todos os funcionários com paginação e ordenação definida através do salário
+    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do salário")
     @GetMapping("/employees/wage")
     public ResponseEntity getAllEmployeesByWage(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -138,6 +145,7 @@ public class AdminController {
 
 
     // Buscar todos os funcionários com paginação e ordenação definida através do status do contrato
+    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do status do contrato")
     @GetMapping("/employees/status")
     public ResponseEntity getAllEmployeesByStatus(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -160,6 +168,7 @@ public class AdminController {
 
 
     // Buscar todos os funcionários com paginação e ordenação definida através do turno do contrato
+    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do turno do contrato")
     @GetMapping("/employees/shift")
     public ResponseEntity getAllEmployeesByShift(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -182,6 +191,7 @@ public class AdminController {
 
 
     // Atualizar o status do contrato do funcionário
+    @Operation(summary = "Atualizar o status do contrato do funcionário")
     @PutMapping("/update/contract/status")
     public ResponseEntity updateStatusOfTheContract(
             @RequestParam(value = "cpf") String cpf,
@@ -213,6 +223,7 @@ public class AdminController {
 
 
     // Atualizar o turno do contrato do funcionário
+            @Operation(summary = "Atualizar o turno do contrato do funcionário")
     @PutMapping("/update/contract/shift")
     public ResponseEntity updateShiftOfTheContract(
             @RequestParam(value = "cpf") String cpf,
@@ -245,6 +256,7 @@ public class AdminController {
 
 
     // Atualizar o tipo do contrato do funcionário
+            @Operation(summary = "Atualizar o tipo do contrato do funcionário")
     @PutMapping("/update/contract/type")
     public ResponseEntity updateTypeOfTheContract(
             @RequestParam(value = "cpf") String cpf,
