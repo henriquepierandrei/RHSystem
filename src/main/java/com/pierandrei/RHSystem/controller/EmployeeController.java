@@ -11,6 +11,7 @@ import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
 import com.pierandrei.RHSystem.model.PayrollModels.InfoPayroll;
 import com.pierandrei.RHSystem.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,8 @@ public class EmployeeController {
     private final TokenService tokenService;
 
 
-    // Obtém o relatório dos pagamentos
+    // Obtém o histórico dos pagamentos
+    @Operation(summary = "Funcionário obtém o histórico dos seus pagamentos")
     @GetMapping("/payments")
     public ResponseEntity getSupport(@AuthenticationPrincipal EmployeeModel employeeModel) {
         List<InfoPayroll> infoPayrolls = this.employeeService.getSupport(employeeModel.getId());
@@ -39,6 +41,7 @@ public class EmployeeController {
 
 
     // Obtém o contrato atual do funcionário
+    @Operation(summary = "Funcionário obtém as informações do contrato atual.")
     @GetMapping("/contract")
     public ResponseEntity getContract(@AuthenticationPrincipal EmployeeModel employeeModel){
         try {

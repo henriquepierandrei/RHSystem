@@ -223,7 +223,7 @@ public class AdminController {
 
 
     // Atualizar o turno do contrato do funcionário
-            @Operation(summary = "Atualizar o turno do contrato do funcionário")
+    @Operation(summary = "Atualizar o turno do contrato do funcionário")
     @PutMapping("/update/contract/shift")
     public ResponseEntity updateShiftOfTheContract(
             @RequestParam(value = "cpf") String cpf,
@@ -256,7 +256,7 @@ public class AdminController {
 
 
     // Atualizar o tipo do contrato do funcionário
-            @Operation(summary = "Atualizar o tipo do contrato do funcionário")
+    @Operation(summary = "Atualizar o tipo do contrato do funcionário")
     @PutMapping("/update/contract/type")
     public ResponseEntity updateTypeOfTheContract(
             @RequestParam(value = "cpf") String cpf,

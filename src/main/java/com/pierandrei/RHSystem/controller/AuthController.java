@@ -6,6 +6,7 @@ import com.pierandrei.RHSystem.dto.Responses.LoginResponseDto;
 import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.infra.security.TokenService;
 import com.pierandrei.RHSystem.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
+    @Operation(summary = "Funcionário faz o login.")
     public ResponseEntity<?> login(@RequestBody LoginDto body) {
         try {
             // Utiliza o método de login do service
@@ -35,6 +37,8 @@ public class AuthController {
         }
     }
 
+
+    @Operation(summary = "Funcionário faz o registro.")
     @PostMapping("/register")
     public ResponseEntity<?> login(@RequestBody RegisterDto body) {
         try {
