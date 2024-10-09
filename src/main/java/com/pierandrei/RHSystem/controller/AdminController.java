@@ -212,5 +212,68 @@ public class AdminController {
     }
 
 
+    // Atualizar o turno do contrato do funcionário
+    @PutMapping("/update/contract/shift")
+    public ResponseEntity updateShiftOfTheContract(
+            @RequestParam(value = "cpf") String cpf,
+            @RequestParam(value = "rg") String rg,
+            @RequestParam(value = "shift") ShiftContract shift) {
+
+        // Buscar funcionário pelo CPF e RG
+        Optional<EmployeeModel> employeeModelOptional = employeeRepository.findByCpfAndRg(cpf, rg);
+        if (employeeModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe nenhum funcionário com esse CPF e RG!");
+        }
+
+        EmployeeModel employeeModel = employeeModelOptional.get();
+
+        // Buscar contrato vinculado ao funcionário
+        Optional<EmployeeContractModel> employeeContractModelOptional = contractRepository.findByEmployee(employeeModel);
+        if (employeeContractModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe contrato vinculado com o funcionário!");
+        }
+
+        EmployeeContractModel employeeContractModel = employeeContractModelOptional.get();
+
+        // Atualizar e salvar o status do contrato
+        employeeContractModel.setShift(shift);
+        contractRepository.save(employeeContractModel);
+
+        return ResponseEntity.ok("Turno modificado para: " + shift);
+    }
+
+
+
+    // Atualizar o tipo do contrato do funcionário
+    @PutMapping("/update/contract/type")
+    public ResponseEntity updateTypeOfTheContract(
+            @RequestParam(value = "cpf") String cpf,
+            @RequestParam(value = "rg") String rg,
+            @RequestParam(value = "typeContract") TypeContract typeContract) {
+
+        // Buscar funcionário pelo CPF e RG
+        Optional<EmployeeModel> employeeModelOptional = employeeRepository.findByCpfAndRg(cpf, rg);
+        if (employeeModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe nenhum funcionário com esse CPF e RG!");
+        }
+
+        EmployeeModel employeeModel = employeeModelOptional.get();
+
+        // Buscar contrato vinculado ao funcionário
+        Optional<EmployeeContractModel> employeeContractModelOptional = contractRepository.findByEmployee(employeeModel);
+        if (employeeContractModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe contrato vinculado com o funcionário!");
+        }
+
+        EmployeeContractModel employeeContractModel = employeeContractModelOptional.get();
+
+        // Atualizar e salvar o status do contrato
+        employeeContractModel.setTypeContract(typeContract);
+        contractRepository.save(employeeContractModel);
+
+        return ResponseEntity.ok("Tipo modificado para: " + typeContract);
+    }
+
+
 
 }
