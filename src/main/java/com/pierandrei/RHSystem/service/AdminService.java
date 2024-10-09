@@ -1,10 +1,7 @@
 package com.pierandrei.RHSystem.service;
 
 import com.pierandrei.RHSystem.dto.Inputs.RegisterContractDto;
-import com.pierandrei.RHSystem.dto.Inputs.RegisterEmployeeDto;
-import com.pierandrei.RHSystem.dto.Inputs.UpdateEmailAndPhoneDto;
 import com.pierandrei.RHSystem.dto.Responses.EmployeeContractResponseDto;
-import com.pierandrei.RHSystem.dto.Responses.ResponseRegisterDto;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
@@ -97,7 +94,7 @@ public class AdminService {
     }
 
 
-    // Deletar um funcionário e seu contrato
+    // Deletar um funcionário e seu contrato (CHECK)
     public Object deleteEmployee(EmployeeModel employeeModel) {
         try {
             Optional<EmployeeContractModel> employeeContractModel = this.contractRepository.findByCpfAndRg(employeeModel.getCpf(), employeeModel.getRg());
@@ -116,10 +113,9 @@ public class AdminService {
 
     @Transactional
     // Atualizar informações de contato
-    public String updatePhoneAndEmail(UpdateEmailAndPhoneDto updateEmailAndPhoneDto) {
+    public String updatePhoneAndEmail(String cpf, String rg, String email, String phone) {
         Optional<EmployeeModel> employeeModelOptional = this.employeeRepository.findByCpfAndRg(
-                updateEmailAndPhoneDto.cpf(),
-                updateEmailAndPhoneDto.rg());
+                cpf,rg);
 
         if (employeeModelOptional.isEmpty()) {
             throw new IllegalArgumentException("Funcionário inexistente!");
@@ -128,19 +124,19 @@ public class AdminService {
         EmployeeModel employeeModel = employeeModelOptional.get();
 
         // Atualiza o email se não estiver vazio e se for válido (não duplicado)
-        if (!updateEmailAndPhoneDto.email().isEmpty()) {
-            if (!isValidEmployeeEmail(updateEmailAndPhoneDto.email())) {
+        if (email != null) {
+            if (!isValidEmployeeEmail(email)) {
                 throw new IllegalArgumentException("Esse email já está em uso!");
             }
-            employeeModel.setEmail(updateEmailAndPhoneDto.email());
+            employeeModel.setEmail(email);
         }
 
         // Atualiza o telefone se não estiver vazio e se for válido (não duplicado)
-        if (!updateEmailAndPhoneDto.phone().isEmpty()) {
-            if (!isValidEmployeePhone(updateEmailAndPhoneDto.phone())) {
+        if (phone != null) {
+            if (!isValidEmployeePhone(phone)) {
                 throw new IllegalArgumentException("Esse número de telefone já está em uso!");
             }
-            employeeModel.setPhone(updateEmailAndPhoneDto.phone());
+            employeeModel.setPhone(phone);
         }
 
         // Salva o modelo atualizado

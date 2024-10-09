@@ -50,4 +50,20 @@ public class AdminController {
     }
 
 
+    // Atualizar informações de contato do funcionário
+    @PutMapping("/update/contact")
+    public ResponseEntity updateContactOfEmployee (@RequestParam(value = "cpf") String cpf, @RequestParam(value = "rg") String rg,
+                                                   @RequestParam(value = "email", required = false) String email, @RequestParam(value = "phone", required = false) String phone){
+
+        Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(cpf, rg);
+        try {
+            return ResponseEntity.ok(this.adminService.updatePhoneAndEmail(cpf, rg, email, phone));
+        }catch (Exception e){
+            // Retorna erro com a mensagem apropriada
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+
 }
