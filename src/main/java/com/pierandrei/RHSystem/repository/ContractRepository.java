@@ -17,15 +17,11 @@ public interface ContractRepository extends JpaRepository<EmployeeContractModel,
 
     Page<EmployeeContractModel> findByTypeContract(TypeContract typeContract, Pageable pageable);
 
-
-//    List<EmployeeContractModel> findByWageLessThanEqual(Double value);
-//
-//    List<EmployeeContractModel> findByStatusContract(StatusContract statusContract);
-//
-//    List<EmployeeContractModel> findByShift(ShiftContract shiftContract);
-
-
-
-
     Optional<EmployeeContractModel> findByEmployee(EmployeeModel employeeModel);
+
+    Page<EmployeeContractModel> findByWageLessThanEqual(Double value, Pageable pageable);
+
+    Page<EmployeeContractModel> findByStatusContract(StatusContract statusContract, Pageable pageable);
+
+    Page<EmployeeContractModel> findByShift(ShiftContract shiftContract, Pageable pageable);
 }

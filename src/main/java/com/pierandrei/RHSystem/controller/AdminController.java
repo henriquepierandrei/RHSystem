@@ -2,6 +2,8 @@ package com.pierandrei.RHSystem.controller;
 
 import com.pierandrei.RHSystem.dto.Inputs.RegisterContractDto;
 import com.pierandrei.RHSystem.dto.Responses.EmployeeContractResponseDto;
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.ShiftContract;
+import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract;
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
@@ -56,6 +58,7 @@ public class AdminController {
     }
 
 
+
     // Atualizar informações de contato do funcionário
     @PutMapping("/update/contact")
     public ResponseEntity updateContactOfEmployee (@RequestParam(value = "cpf") String cpf, @RequestParam(value = "rg") String rg,
@@ -87,9 +90,10 @@ public class AdminController {
     }
 
 
+
     // Buscar todos os funcionários com paginação e ordenação definida através do tipo do contrato
     @GetMapping("/employees/type")
-    public ResponseEntity getAllEmployeesByContract(
+    public ResponseEntity getAllEmployeesBType(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "typeContract") TypeContract typeContract) {
@@ -107,6 +111,71 @@ public class AdminController {
         }
     }
 
+
+
+    // Buscar todos os funcionários com paginação e ordenação definida através do salário
+    @GetMapping("/employees/wage")
+    public ResponseEntity getAllEmployeesByWage(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "wage") double wage) {
+
+        try {
+            // Define a ordenação (opcional)
+            Sort sort = Sort.by("id").ascending();
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            Page<EmployeeModel> employees = this.adminService.getEmployeesByWage(wage, pageable);
+
+            return ResponseEntity.ok(employees);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
+        }
+    }
+
+
+
+    // Buscar todos os funcionários com paginação e ordenação definida através do status do contrato
+    @GetMapping("/employees/status")
+    public ResponseEntity getAllEmployeesByStatus(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "statusContract") StatusContract statusContract) {
+
+        try {
+            // Define a ordenação (opcional)
+            Sort sort = Sort.by("id").ascending();
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            Page<EmployeeModel> employees = this.adminService.getEmployeesByStatus(statusContract, pageable);
+
+            return ResponseEntity.ok(employees);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
+        }
+    }
+
+
+
+    // Buscar todos os funcionários com paginação e ordenação definida através do turno do contrato
+    @GetMapping("/employees/shift")
+    public ResponseEntity getAllEmployeesByShift(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "shift")ShiftContract shiftContract) {
+
+        try {
+            // Define a ordenação (opcional)
+            Sort sort = Sort.by("id").ascending();
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            Page<EmployeeModel> employees = this.adminService.getEmployeesByShift(shiftContract, pageable);
+
+            return ResponseEntity.ok(employees);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
+        }
+    }
 
 
 

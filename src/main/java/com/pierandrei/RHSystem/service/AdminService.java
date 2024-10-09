@@ -156,7 +156,7 @@ public class AdminService {
     }
 
 
-    // Busca por todos os funcionários pelo tipo do contrato
+    // Busca por todos os funcionários pelo tipo do contrato (CHECK)
     public Page<EmployeeModel> getEmployeesByContractType(TypeContract typeContract, Pageable pageable) {
         // Busca por todos os contratos de acordo com o tipo
         Page<EmployeeContractModel> employeeContracts = this.contractRepository.findByTypeContract(typeContract, pageable);
@@ -175,44 +175,65 @@ public class AdminService {
     }
 
 
-//    // Busca funcionários de acordo com seus salários (EX: value = 5000, funcionários com até R$5000,00 de salário serão visualizados!)
-//    public List<EmployeeModel> getEmployeesByWage(Double value) {
-//        // Busca todos os funcionários com salários menores ou iguais ao valor especificado
-//        List<EmployeeContractModel> employeeModels = this.contractRepository.findByWageLessThanEqual(value);
-//
-//        // Verificação para tratar caso não encontre funcionários
-//        if (employeeModels.isEmpty()) {
-//            throw new IllegalArgumentException("Nenhum funcionário encontrado com salários até: R$" + value);
-//        }
-//
-//        return employeeModels;
-//    }
-//
-//    // Busca funcionários de acordo com o status do contrato
-//    public List<EmployeeModel> getEmployeesByStatus(StatusContract statusContract){
-//        // Busca todos os funcionários com status especificado
-//        List<EmployeeContractModel> employeeModels = this.contractRepository.findByStatusContract(statusContract);
-//
-//        // Verificação para tratar caso não encontre funcionários
-//        if (employeeModels.isEmpty()) {
-//            throw new IllegalArgumentException("Nenhum funcionário encontrado com status: " + statusContract);
-//        }
-//
-//        return employeeModels;
-//    }
-//
-//    // Busca funcionários de acordo com o turno de trabalho
-//    public List<EmployeeModel> getEmployeesByShift(ShiftContract shiftContract){
-//        // Busca todos os funcionários com status especificado
-//        List<EmployeeContractModel> employeeModels = this.contractRepository.findByShift(shiftContract);
-//
-//        // Verificação para tratar caso não encontre funcionários
-//        if (employeeModels.isEmpty()) {
-//            throw new IllegalArgumentException("Nenhum funcionário encontrado trabalhando no turno: " + shiftContract);
-//        }
-//
-//        return employeeModels;
-//    }
+    // Busca funcionários de acordo com seus salários (EX: value = 5000, funcionários com até R$5000,00 de salário serão visualizados!) (CHECK)
+    public Page<EmployeeModel> getEmployeesByWage(Double value, Pageable pageable) {
+        // Busca todos os funcionários com salários menores ou iguais ao valor especificado
+        Page<EmployeeContractModel> employeeModels = this.contractRepository.findByWageLessThanEqual(value, pageable);
+
+        // Verificação para tratar caso não encontre funcionários
+        if (employeeModels.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum funcionário encontrado com salários até: R$" + value);
+        }
+
+        // Mapeia os contratos para os funcionários
+        List<EmployeeModel> employees = employeeModels.stream()
+                .map(EmployeeContractModel::getEmployee) // Acessa o funcionário a partir do contrato
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(employees, pageable, employeeModels.getTotalElements());
+    }
+
+
+
+
+
+    // Busca funcionários de acordo com o status do contrato (CHECK)
+    public Page<EmployeeModel> getEmployeesByStatus(StatusContract statusContract, Pageable pageable){
+        // Busca todos os funcionários com status especificado
+        Page<EmployeeContractModel> employeeModels = this.contractRepository.findByStatusContract(statusContract, pageable);
+
+        // Verificação para tratar caso não encontre funcionários
+        if (employeeModels.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum funcionário encontrado com o status: " + statusContract);
+        }
+
+        // Mapeia os contratos para os funcionários
+        List<EmployeeModel> employees = employeeModels.stream()
+                .map(EmployeeContractModel::getEmployee) // Acessa o funcionário a partir do contrato
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(employees, pageable, employeeModels.getTotalElements());
+
+    }
+
+    
+
+    // Busca funcionários de acordo com o turno de trabalho (CHECK)
+    public Page<EmployeeModel> getEmployeesByShift(ShiftContract shiftContract,Pageable pageable){
+        // Busca todos os funcionários com status especificado
+        Page<EmployeeContractModel> employeeModels = this.contractRepository.findByShift(shiftContract, pageable);
+
+        // Verificação para tratar caso não encontre funcionários
+        if (employeeModels.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum funcionário encontrado trabalhando no turno: " + shiftContract);
+        }
+        // Mapeia os contratos para os funcionários
+        List<EmployeeModel> employees = employeeModels.stream()
+                .map(EmployeeContractModel::getEmployee) // Acessa o funcionário a partir do contrato
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(employees, pageable, employeeModels.getTotalElements());
+    }
 
 
     @Transactional
