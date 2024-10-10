@@ -1,10 +1,8 @@
 package com.pierandrei.RHSystem.model.EmployeeModels;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
@@ -15,9 +13,14 @@ public class LeaveModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; // Identificador único
 
-    private long employeeId; // Referência ao funcionário
-    private int missedBusinessDays;           // Dias úteis faltados
+    @ManyToOne
+    private EmployeeModel employee;        // Funcionário
+
+    private LocalDate localStart;
+    private LocalDate localEnd;
 
     private String type; // Tipo de licença (médica, maternidade, etc.)
     private String reason; // Motivo da licença (opcional)
+
+    private boolean isActive;     // Verificar se está de licença
 }

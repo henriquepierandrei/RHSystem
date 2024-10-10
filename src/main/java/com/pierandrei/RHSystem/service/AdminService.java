@@ -229,60 +229,46 @@ public class AdminService {
 
 
 
-//    @Transactional
-//    // Obtém a folha de pagamento
-//    public PayrollModel getPayroll() {
-//        // Obtendo todos os contratos de funcionários
-//        List<EmployeeContractModel> employeeContractModels = this.contractRepository.findAll();
-//
-//        // Lista que armazenará as informações de pagamento de cada funcionário
-//        List<InfoPayroll> infoPayrolls = new ArrayList<>();
-//
-//        PayrollModel payrollModel = new PayrollModel();
-//        double total = 0; // Variável para somar o total pago na folha
-//
-//        // Iterando sobre todos os contratos dos funcionários
-//        for (EmployeeContractModel employeeContractModel : employeeContractModels) {
-//            InfoPayroll payroll = new InfoPayroll(); // Cria uma nova instância para cada funcionário
-//            payroll.setBonus(employeeContractModel.getBonus()); // Define o bônus do funcionário
-//            payroll.setEmployeeId(employeeContractModel.getId()); // Define o ID do funcionário
-//
-//            // Verifica se o funcionário tem faltas registradas
-//            Optional<LeaveModel> leaveModelOptional = this.leaveRepository.findByEmployeeId(employeeContractModel.getId());
-//
-//            if (leaveModelOptional.isPresent()) {
-//                // Se houver faltas, calcula o desconto baseado nos dias perdidos
-//                double dailyWage = employeeContractModel.getWage() / 20; // Supondo que sejam 20 dias úteis no mês
-//                double discount = dailyWage * leaveModelOptional.get().getMissedBusinessDays(); // Calcula o desconto com base nos dias perdidos
-//
-//                payroll.setDiscount(discount); // Define o valor do desconto no payroll
-//                payroll.setWage(employeeContractModel.getWage() - discount); // Define o salário subtraído pelo desconto
-//                total += payroll.getWage(); // Soma o salário ao total pago na folha
-//            } else {
-//                // Se o funcionário não tiver faltas, usa o salário completo
-//                payroll.setDiscount(0); // Sem desconto
-//                payroll.setWage(employeeContractModel.getWage()); // Salário integral
-//                total += payroll.getWage(); // Soma o salário ao total pago
-//            }
-//            payroll.setDate(LocalDate.now()); // Define a data atual
-//            // Salva as informações do payroll no banco de dados
-//            this.infoRepository.save(payroll);
-//            infoPayrolls.add(payroll); // Adiciona o payroll à lista para ser incluído na folha de pagamento
-//        }
-//
-//        // Define os valores no PayrollModel
-//        payrollModel.setEmployeesPayroll(infoPayrolls); // Define a lista de funcionários com seus pagamentos
-//        payrollModel.setPaymentDate(LocalDate.now()); // Define a data de pagamento como a data atual
-//        payrollModel.setPaidTotal(total); // Define o valor total pago na folha
-//
-//        // Salva a folha de pagamento no banco de dados
-//        this.payrollRepository.save(payrollModel);
-//
-//        return payrollModel; // Retorna o objeto PayrollModel preenchido
-//    }
+    // Adicionar licença ao funcionário
+    public LeaveModel setLeave(EmployeeModel employeeModel, LocalDate start, LocalDate end, String type, String reason) {
+        // Validações
+        if (start == null || end == null || employeeModel == null || type.isEmpty() || reason.isEmpty()) {
+            throw new IllegalArgumentException("Parâmetros inválidos para criar licença.");
+        }
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("Data de início não pode ser após a data de término.");
+        }
 
+        // Desativa qualquer licença ativa do funcionário
+        Optional<LeaveModel> activeLeave = this.leaveRepository.findByEmployeeAndIsActive(employeeModel, true);
+        activeLeave.ifPresent(existingLeave -> {
+            existingLeave.setActive(false);
+            this.leaveRepository.save(existingLeave);
+        });
 
+        // Cria e salva a nova licença
+        LeaveModel leaveModel = new LeaveModel();
+        leaveModel.setEmployee(employeeModel);
+        leaveModel.setType(type);
+        leaveModel.setReason(reason);
+        leaveModel.setLocalStart(start);
+        leaveModel.setLocalEnd(end);
+        leaveModel.setActive(true); // Marca como ativa
+        this.leaveRepository.save(leaveModel);
 
+        return leaveModel;
+    }
+
+    // Remover a licença do funcionário de acordo com a data
+    public void removeLeave(LocalDate today) {
+        List<LeaveModel> leaveModels = this.leaveRepository.findByIsActiveAndLocalEnd(true, today);
+        if (leaveModels != null) {
+            for (LeaveModel leaveModel : leaveModels) {
+                leaveModel.setActive(false);
+                this.leaveRepository.save(leaveModel);
+            }
+        }
+    }
 
 }
 

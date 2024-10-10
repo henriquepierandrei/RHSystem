@@ -7,21 +7,23 @@ import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.StatusContract
 import com.pierandrei.RHSystem.enuns.Employees.EmploymentContract.TypeContract;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeContractModel;
 import com.pierandrei.RHSystem.model.EmployeeModels.EmployeeModel;
+import com.pierandrei.RHSystem.model.EmployeeModels.LeaveModel;
 import com.pierandrei.RHSystem.repository.ContractRepository;
 import com.pierandrei.RHSystem.repository.EmployeeRepository;
 import com.pierandrei.RHSystem.service.AdminService;
-import com.pierandrei.RHSystem.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -47,8 +49,8 @@ public class AdminController {
 
 
     // Deletar contrato do funcionário e funcionário
-    @Operation(summary = "Deletar contrato do funcionário e funcionário")
-    @DeleteMapping("/delete")
+    @Operation(summary = "Deletar contrato e funcionário")
+    @DeleteMapping("/delete/all")
     public ResponseEntity deleteEmployeeAndContract(@RequestParam(value = "cpf") String cpf, @RequestParam(value = "rg") String rg){
         Optional<EmployeeModel> employeeModel = employeeRepository.findByCpfAndRg(cpf, rg);
 
@@ -285,6 +287,39 @@ public class AdminController {
 
         return ResponseEntity.ok("Tipo modificado para: " + typeContract);
     }
+
+
+
+    // Adicionar licença ao funcionário
+    @PutMapping("/add/leave")
+    public ResponseEntity<String> addEmployeeLeave(
+            @RequestParam(value = "rg") String rg,
+            @RequestParam(value = "cpf") String cpf,
+            @RequestParam(value = "start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam(value = "end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,
+            @RequestParam(value = "type") String type,
+            @RequestParam(value = "reason") String reason) {
+
+        // Buscar funcionário pelo CPF e RG
+        Optional<EmployeeModel> employeeModelOptional = employeeRepository.findByCpfAndRg(cpf, rg);
+
+        // Verificar se o funcionário existe
+        if (employeeModelOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Não existe nenhum funcionário com esse CPF e RG!");
+        }
+
+        // Adicionar licença ao funcionário
+        try {
+            LeaveModel leaveModel = adminService.setLeave(employeeModelOptional.get(), start, end, type, reason);
+            return ResponseEntity.ok("Licença adicionada com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao adicionar licença: " + e.getMessage());
+        }
+    }
+
+
 
 
 
