@@ -100,6 +100,9 @@ public class AdminController {
 
 
 
+
+
+
     // Buscar todos os funcionários com paginação e ordenação definida através do tipo do contrato
     @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do tipo do contrato")
     @GetMapping("/employees/type")
@@ -123,20 +126,20 @@ public class AdminController {
 
 
 
-    // Buscar todos os funcionários com paginação e ordenação definida através do salário
-    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do salário")
-    @GetMapping("/employees/wage")
+    // Buscar todos os funcionários com paginação e ordenação definida através do cargo
+    @Operation(summary = "Buscar todos os funcionários com paginação e ordenação definida através do cargo")
+    @GetMapping("/employees/position")
     public ResponseEntity getAllEmployeesByWage(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "wage") double wage) {
+            @RequestParam(value = "position") String position) {
 
         try {
             // Define a ordenação (opcional)
-            Sort sort = Sort.by("id").ascending();
+            Sort sort = Sort.by("statusContract").ascending();
             Pageable pageable = PageRequest.of(page, size, sort);
 
-            Page<EmployeeModel> employees = this.adminService.getEmployeesByWage(wage, pageable);
+            Page<EmployeeModel> employees = this.adminService.getEmployeesByPosition(position, pageable);
 
             return ResponseEntity.ok(employees);
         }catch (Exception e){

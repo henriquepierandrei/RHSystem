@@ -28,16 +28,6 @@ public class EmployeeController {
     private final TokenService tokenService;
 
 
-    // Obtém o histórico dos pagamentos
-    @Operation(summary = "Funcionário obtém o histórico dos seus pagamentos")
-    @GetMapping("/payments")
-    public ResponseEntity getSupport(@AuthenticationPrincipal EmployeeModel employeeModel) {
-        List<InfoPayroll> infoPayrolls = this.employeeService.getSupport(employeeModel.getId());
-        if (infoPayrolls.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não existe nenhum registro de pagamento!");
-
-        return ResponseEntity.status(HttpStatus.OK).body(infoPayrolls);
-
-    }
 
 
     // Obtém o contrato atual do funcionário

@@ -226,7 +226,22 @@ public class AdminService {
         return new PageImpl<>(employees, pageable, employeeModels.getTotalElements());
     }
 
+    // Busca funcionários de acordo com o cargo de trabalho (CHECK)
+    public Page<EmployeeModel> getEmployeesByPosition(String position, Pageable pageable) {
+        // Busca todos os funcionários com status especificado
+        Page<EmployeeContractModel> employeeModels = this.contractRepository.findByPosition(position, pageable);
 
+        // Verificação para tratar caso não encontre funcionários
+        if (employeeModels.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum funcionário encontrado trabalhando no cargo: " + position);
+        }
+        // Mapeia os contratos para os funcionários
+        List<EmployeeModel> employees = employeeModels.stream()
+                .map(EmployeeContractModel::getEmployee) // Acessa o funcionário a partir do contrato
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(employees, pageable, employeeModels.getTotalElements());
+    }
 
 
     // Adicionar licença ao funcionário
@@ -269,6 +284,7 @@ public class AdminService {
             }
         }
     }
+
 
 }
 

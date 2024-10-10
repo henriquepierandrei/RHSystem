@@ -24,4 +24,6 @@ public interface ContractRepository extends JpaRepository<EmployeeContractModel,
     Page<EmployeeContractModel> findByStatusContract(StatusContract statusContract, Pageable pageable);
 
     Page<EmployeeContractModel> findByShift(ShiftContract shiftContract, Pageable pageable);
+
+    Page<EmployeeContractModel> findByPosition(String position, Pageable pageable);
 }

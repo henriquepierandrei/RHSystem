@@ -18,4 +18,7 @@ public class ScheduledService {
         System.out.println("Removendo funcionários da licença!");
         this.adminService.removeLeave(LocalDate.now());
     }
+
+
+
 }
