@@ -38,3 +38,51 @@ spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 api.security.token.secret=my-secret-key
 ```
 
+
+› EndPoints
+------------
+## 🔒 Authentication
+
+### → Login
+- **Description**: Use JWT as the authenticator to log in.
+- **Endpoint**: 
+
+    ```
+    [ POST ] http://localhost:8080/auth/login
+    ```
+- **Request Body**:
+    ```json
+    {
+        "cpf": "111.111.111-11",
+        "password": "password123"
+    }
+    ```
+- **Response**: A JWT token for authentication.
+
+---
+
+### → Register
+- **Description**: Register a new employee in the system.
+- **Endpoint**: 
+
+    ```
+    [ POST ] http://localhost:8080/auth/register
+    ```
+- **Request Body**:
+    ```json
+    {
+        "name": "John Doe",
+        "email": "johndoe@example.com",
+        "password": "password123",
+        "dateBorn": "1111-11-11",
+        "cpf": "111.111.111-11",
+        "phone": "11111111111",
+        "rg": "1.111.111-1"
+    
+    }
+    ```
+
+---
+
+
+
