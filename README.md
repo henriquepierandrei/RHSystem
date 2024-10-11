@@ -162,9 +162,384 @@ api.security.token.secret=my-secret-key
 
 ```200 OK - "Dados do funcionário atualizados!"```
   
-```404 BAD REQUEST - "Erro ao remover o funcionário e contrato: ERRO"```
+```404 BAD REQUEST - "ERRO especificado"```
 
 ---
+
+---
+
+### ৹ Get all Employees:
+- **Description**: Get all employees
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ GET ] http://localhost:8080/admin/employees
+    ```
+- **RequestParam**:
+    ```
+    page=0
+    ```
+- **Response**:
+
+```{
+    "content": [
+        {
+            "id": 152,
+            "name": "xxxxxxxxxx",
+            "email": "xxxxxxxx@gmail.com",
+            "dateBorn": "1990-05-15",
+            "cpf": "111.111.111-11",
+            "phone": "11987651345",
+            "rg": "11-111.111-1",
+            "employeeContractModel": null,
+            "password": "$2a$10$X.6khMapRny4hsdl31cyAe7n21zOahNIxzj6VVNoAVSpB8dtnmCGG",
+            "admin": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "unsorted": false,
+        "sorted": true
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
+```
+
+---
+
+
+---
+
+### ৹ Get all Employees by Type Contract:
+- **Description**: Get all employees by Type Contract
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ GET ] http://localhost:8080/admin/employees/type
+    ```
+- **RequestParam**:
+    ```
+    page=0
+    size=0
+    typeContract=CLT
+    ```
+- **Response**:
+
+```{
+    "content": [
+        {
+            "id": 152,
+            "name": "xxxxxxxxxx",
+            "email": "xxxxxxxx@gmail.com",
+            "dateBorn": "1990-05-15",
+            "cpf": "111.111.111-11",
+            "phone": "11987651345",
+            "rg": "11-111.111-1",
+            "employeeContractModel": null,
+            "password": "$2a$10$X.6khMapRny4hsdl31cyAe7n21zOahNIxzj6VVNoAVSpB8dtnmCGG",
+            "admin": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "unsorted": false,
+        "sorted": true
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
+```
+
+---
+
+
+---
+
+### ৹ Get all Employees by Position:
+- **Description**: Get all employees by Position:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ GET ] http://localhost:8080/admin/employees/position
+    ```
+- **RequestParam**:
+    ```
+    page=0
+    size=0
+    position=Desenvolvedor
+    ```
+- **Response**:
+
+```{
+    "content": [
+        {
+            "id": 152,
+            "name": "xxxxxxxxxx",
+            "email": "xxxxxxxx@gmail.com",
+            "dateBorn": "1990-05-15",
+            "cpf": "111.111.111-11",
+            "phone": "11987651345",
+            "rg": "11-111.111-1",
+            "employeeContractModel": null,
+            "password": "$2a$10$X.6khMapRny4hsdl31cyAe7n21zOahNIxzj6VVNoAVSpB8dtnmCGG",
+            "admin": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "unsorted": false,
+        "sorted": true
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
+```
+
+---
+
+---
+
+### ৹ Get all Employees by Status:
+- **Description**: Get all employees by Status:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ GET ] http://localhost:8080/admin/employees/status
+    ```
+- **RequestParam**:
+    ```
+    page=0
+    size=0
+    statusContract=ATIVO
+    ```
+- **Response**:
+
+```{
+    "content": [
+        {
+            "id": 152,
+            "name": "xxxxxxxxxx",
+            "email": "xxxxxxxx@gmail.com",
+            "dateBorn": "1990-05-15",
+            "cpf": "111.111.111-11",
+            "phone": "11987651345",
+            "rg": "11-111.111-1",
+            "employeeContractModel": null,
+            "password": "$2a$10$X.6khMapRny4hsdl31cyAe7n21zOahNIxzj6VVNoAVSpB8dtnmCGG",
+            "admin": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "unsorted": false,
+        "sorted": true
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
+```
+
+---
+
+### ৹ Get all Employees by Shift:
+- **Description**: Get all employees by Shift:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ GET ] http://localhost:8080/admin/employees/status
+    ```
+- **RequestParam**:
+    ```
+    page=0
+    size=0
+    shiftContract=INTEGRAL
+    ```
+- **Response**:
+
+```{
+    "content": [
+        {
+            "id": 152,
+            "name": "xxxxxxxxxx",
+            "email": "xxxxxxxx@gmail.com",
+            "dateBorn": "1990-05-15",
+            "cpf": "111.111.111-11",
+            "phone": "11987651345",
+            "rg": "11-111.111-1",
+            "employeeContractModel": null,
+            "password": "$2a$10$X.6khMapRny4hsdl31cyAe7n21zOahNIxzj6VVNoAVSpB8dtnmCGG",
+            "admin": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "unsorted": false,
+        "sorted": true
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
+```
+---
+
+
+### ৹ Get all Employees by Shift:
+- **Description**: Get all employees by Shift:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ GET ] http://localhost:8080/admin/employees/status
+    ```
+- **RequestParam**:
+    ```
+    page=0
+    size=0
+    shiftContract=INTEGRAL
+    ```
+- **Response**:
+
+```{
+    "content": [
+        {
+            "id": 152,
+            "name": "xxxxxxxxxx",
+            "email": "xxxxxxxx@gmail.com",
+            "dateBorn": "1990-05-15",
+            "cpf": "111.111.111-11",
+            "phone": "11987651345",
+            "rg": "11-111.111-1",
+            "employeeContractModel": null,
+            "password": "$2a$10$X.6khMapRny4hsdl31cyAe7n21zOahNIxzj6VVNoAVSpB8dtnmCGG",
+            "admin": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "unsorted": false,
+        "sorted": true
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
+```
+---
+
+
 
 
 
@@ -179,7 +554,7 @@ api.security.token.secret=my-secret-key
 - **Response**:
     ```json
     {
-        {
+        
     "employeeModel": {
         "id": 152,
         "name": "Fulano",
