@@ -182,7 +182,8 @@ api.security.token.secret=my-secret-key
     ```
 - **Response**:
 
-```{
+```json
+{
     "content": [
         {
             "id": 152,
@@ -246,7 +247,8 @@ api.security.token.secret=my-secret-key
     ```
 - **Response**:
 
-```{
+```json
+{
     "content": [
         {
             "id": 152,
@@ -310,7 +312,8 @@ api.security.token.secret=my-secret-key
     ```
 - **Response**:
 
-```{
+```json
+{
     "content": [
         {
             "id": 152,
@@ -373,7 +376,8 @@ api.security.token.secret=my-secret-key
     ```
 - **Response**:
 
-```{
+```json
+{
     "content": [
         {
             "id": 152,
@@ -434,7 +438,8 @@ api.security.token.secret=my-secret-key
     ```
 - **Response**:
 
-```{
+```json
+{
     "content": [
         {
             "id": 152,
@@ -495,7 +500,8 @@ api.security.token.secret=my-secret-key
     ```
 - **Response**:
 
-```{
+```json
+{
     "content": [
         {
             "id": 152,
