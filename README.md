@@ -539,6 +539,27 @@ api.security.token.secret=my-secret-key
 ```
 ---
 
+---
+
+
+### ৹ Update contract status:
+- **Description**: update contract status in system:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ PUT ] http://localhost:8080/admin//update/contract/status
+    ```
+- **RequestParam**:
+    ```
+    cpf=111.111.111-11
+    rg=11.111.111-1
+    statusContract=SUSPENSO
+    ```
+- **Response**:
+
+``` 200 OK: Status modificado para: SUSPENSO ```
+---
 
 
 
