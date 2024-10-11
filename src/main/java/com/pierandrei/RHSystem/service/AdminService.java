@@ -141,7 +141,7 @@ public class AdminService {
 
         // Salva o modelo atualizado
         this.employeeRepository.save(employeeModel);
-        return "Dados do usuário atualizados com sucesso!";
+        return "Dados do funcionário atualizados com sucesso!";
     }
 
 

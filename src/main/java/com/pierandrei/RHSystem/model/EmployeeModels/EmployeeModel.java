@@ -25,10 +25,6 @@ public class EmployeeModel {
     private String phone; // Telefone do funcionário
     private String rg; // RG do funcionário
 
-    // Dados de Documentos
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contract_id", referencedColumnName = "id")
-    private EmployeeContractModel employeeContractModel; // Referência ao modelo de contrato do funcionário
 
     @NotEmpty
     private String password;
