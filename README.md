@@ -542,13 +542,34 @@ api.security.token.secret=my-secret-key
 ---
 
 
+### ৹ Update contract shift:
+- **Description**: update contract shift in system:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ PUT ] http://localhost:8080/admin/update/contract/shift
+    ```
+- **RequestParam**:
+    ```
+    cpf=111.111.111-11
+    rg=11.111.111-1
+    shift=INTEGRAL
+    ```
+- **Response**:
+
+``` 200 OK: Tipo modificado para: INTEGRAL```
+``` 400 BAD_REQUEST: ERROR especificado```
+---
+
+
 ### ৹ Update contract status:
 - **Description**: update contract status in system:
 - Required ROLE_ADMIN
 - **Endpoint**:
 
     ```
-    [ PUT ] http://localhost:8080/admin//update/contract/status
+    [ PUT ] http://localhost:8080/admin/update/contract/status
     ```
 - **RequestParam**:
     ```
@@ -559,9 +580,60 @@ api.security.token.secret=my-secret-key
 - **Response**:
 
 ``` 200 OK: Status modificado para: SUSPENSO ```
+``` 400 BAD_REQUEST: ERROR especificado```
+
 ---
 
 
+### ৹ Update contract type:
+- **Description**: update contract type in system:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ PUT ] http://localhost:8080/admin/update/contract/type
+    ```
+- **RequestParam**:
+    ```
+    cpf=111.111.111-11
+    rg=11.111.111-1
+    typContract=CLT
+    ```
+- **Response**:
+
+``` 200 OK: Tipo modificado para: CLT ```
+``` 400 BAD_REQUEST: ERROR especificado```
+---
+
+---
+
+
+### ৹ Add license to employee:
+- **Description**: Add license to employee in system:
+- Required ROLE_ADMIN
+- **Endpoint**:
+
+    ```
+    [ PUT ] http://localhost:8080/admin/add/leave
+    ```
+- **RequestParam**:
+    ```
+    cpf=111.111.111-11
+    rg=11.111.111-1
+    start=2024-09-18
+    end=2024-10-18
+    type=type
+    reason=reason
+    ```
+- **Response**:
+
+``` 200 OK: Licença adicionada com sucesso! ```
+
+``` 400 BAD_REQUEST: Não existe nenhum funcionário com esse CPF e RG!```
+
+``` 500 INTERNAL_SERVER_ERROR: Erro ao adicionar licença: (ERROR)```
+
+---
 
 
 ## 💼 Employee Controller
