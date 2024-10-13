@@ -566,6 +566,7 @@ api.security.token.secret=my-secret-key
 
 ``` 200 OK: Tipo modificado para: INTEGRAL```
 ``` 400 BAD_REQUEST: ERROR especificado```
+
 ---
 
 
