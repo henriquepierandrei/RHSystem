@@ -610,7 +610,6 @@ api.security.token.secret=my-secret-key
 
 ``` 200 OK: Tipo modificado para: CLT ```
 ``` 400 BAD_REQUEST: ERROR especificado```
----
 
 ---
 
